@@ -1,0 +1,28 @@
+/* styles/MyCollection.module.css */
+
+.container {
+    padding: 2rem;
+    text-align: center;
+}
+
+.main {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.object-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    text-align: center;
+}
+
+.object-card img {
+    max-width: 100%;
+    height: auto;
+}
