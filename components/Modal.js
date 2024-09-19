@@ -34,7 +34,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     <p><strong>Culture:</strong> {content.culture}</p>
                     <p><strong>Period:</strong> {content.period}</p>
                     <p><strong>Repository:</strong> {content.repository}</p>
-                    <p><strong>Link:</strong> <a href={content.linkResource} target="_blank" rel="noopener noreferrer">More Details</a></p>
+                    <p><strong>Link:</strong> <a href={content.objectURL} target="_blank" rel="noopener noreferrer">More Details</a></p>
                 </div>
             </div>
         </Modal>

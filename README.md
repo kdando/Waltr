@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Welcome to Waltr!
+
+“Every passion borders on the chaotic, but the collector's passion borders on the chaos of memories.”
+― Walter Benjamin 
 
 ## Getting Started
 
