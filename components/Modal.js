@@ -20,6 +20,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     border: 'none',
                     padding: '20px',
                     display: 'flex',
+                    color: 'black'
                 },
             }}
         >

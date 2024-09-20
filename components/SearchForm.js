@@ -1,13 +1,45 @@
 // components/SearchForm.js
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../styles/Search.module.css';
 
-const SearchForm = ({ searchQuery, showInCollection, showHasImages, sortOrder, onSearch, onSearchQueryChange, onFilterChange, onSortChange }) => {
+const SearchForm = ({
+    searchQuery,
+    showInCollection,
+    showHasImages,
+    sortOrder,
+    onSearch,
+    onSearchQueryChange,
+    onFilterChange,
+    onSortChange,
+    resultsPerPage,
+    setResultsPerPage,
+    onResultsPerPageChange,
+    currentPage,
+    onPageChange
+}) => {
+
+
+
     const handleSearch = async (event) => {
         event.preventDefault();
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder);
+        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
     };
+
+    const handleResultsPerPageChange = (event) => {
+        const newResultsPerPage = parseInt(event.target.value, 10);
+        setResultsPerPage(newResultsPerPage);
+        onResultsPerPageChange(newResultsPerPage);
+        onPageChange(1);
+    };
+
+    const handlePageChange = (page) => {
+        onPageChange(page);
+    };
+
+    useEffect(() => {
+        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
+    }, [currentPage, resultsPerPage]);
 
     const handleFilterChange = (event, filterType) => {
         const value = event.target.checked;
@@ -53,6 +85,22 @@ const SearchForm = ({ searchQuery, showInCollection, showHasImages, sortOrder, o
                         <option value="newestFirst">Newest First</option>
                     </select>
                 </label>
+                <label>
+                    Results per page:
+                    <select value={resultsPerPage} onChange={handleResultsPerPageChange}>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </label>
+            </div>
+            <div className={styles.pagination}>
+                <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage <= 1}>Previous</button>
+                <span>Page {currentPage}</span>
+                <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
             </div>
         </div>
     );
