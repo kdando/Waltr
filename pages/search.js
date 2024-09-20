@@ -1,36 +1,47 @@
 // pages/search.js
 
+import styles from '../styles/Search.module.css';
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import ObjectCard from '../components/ObjectCard';
-import styles from '../styles/Search.module.css';
-import Navbar from '@/components/Navbar';
+import Navbar from '../components/Navbar';
 import CustomModal from '../components/Modal';
 import SearchForm from '../components/SearchForm';
 import { CollectionContext } from '../contexts/CollectionContext';
+import { useLoading } from '../contexts/LoadingContext';
+import Loading from '../components/Loading';
 
 const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const { isLoading, setIsLoading } = useLoading();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState("");
+    const [modalContent, setModalContent] = useState("")
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
     const [showHasImages, setShowHasImages] = useState(true);
     const [sortOrder, setSortOrder] = useState('oldestFirst');
     const { collection } = useContext(CollectionContext);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [resultsPerPage, setResultsPerPage] = useState(10);
 
-    const handleSearch = async (query, showInCollection, showHasImages, sortOrder) => {
-        setLoading(true);
+    const handleSearch = async (query, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage) => {
+        setIsLoading(true);
         try {
             const response = await axios.get(`/api/search`, {
-                params: { query, showInCollection, showHasImages, sortOrder },
+                params: {
+                    query,
+                    showInCollection,
+                    showHasImages,
+                    sortOrder,
+                    resultsPerPage,
+                    currentPage
+                }
             });
             setSearchResults(response.data);
         } catch (error) {
             console.error(error);
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -80,9 +91,14 @@ const Search = () => {
                     }
                 }}
                 onSortChange={(value) => setSortOrder(value)}
+                onResultsPerPageChange={(value) => setResultsPerPage(value)}
+                resultsPerPage={resultsPerPage}
+                setResultsPerPage={setResultsPerPage}
+                currentPage={currentPage}
+                onPageChange={(page) => setCurrentPage(page)}
             />
-            {loading ? (
-                <p>Loading...</p>
+            {isLoading ? (
+                <Loading />
             ) : (
                 <div className={styles.grid}>
                     {sortedResults.map((result, index) => (
