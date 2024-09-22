@@ -1,7 +1,7 @@
 // components/SearchForm.js
 
 import React, { useEffect } from 'react';
-import styles from '../styles/Search.module.css';
+import { FormControl, FormLabel, FormControlLabel, Switch, Select, MenuItem, Button, TextField, Stack } from '@mui/material';
 
 const SearchForm = ({
     searchQuery,
@@ -16,11 +16,8 @@ const SearchForm = ({
     setResultsPerPage,
     onResultsPerPageChange,
     currentPage,
-    onPageChange
+    onPageChange,
 }) => {
-
-
-
     const handleSearch = async (event) => {
         event.preventDefault();
         onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
@@ -41,8 +38,7 @@ const SearchForm = ({
         onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
     }, [currentPage, resultsPerPage]);
 
-    const handleFilterChange = (event, filterType) => {
-        const value = event.target.checked;
+    const handleFilterChange = (filterType, value) => {
         onFilterChange(filterType, value);
     };
 
@@ -51,59 +47,67 @@ const SearchForm = ({
     };
 
     return (
-        <div>
+        <Stack spacing={3}>
             <form onSubmit={handleSearch}>
-                <input
-                    type="text"
+                <TextField
+                    label="Search"
                     value={searchQuery}
                     onChange={(event) => onSearchQueryChange(event.target.value)}
-                    placeholder="Search"
+                    variant="outlined"
                 />
-                <button type="submit">Search</button>
+                <Button type="submit" variant="contained" color="primary">
+                    Search
+                </Button>
             </form>
-            <div className={styles.filters}>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showInCollection}
-                        onChange={(event) => handleFilterChange(event, 'showInCollection')}
+            <div>
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">Filters</FormLabel>
+                    <FormControlLabel
+                        control={<Switch checked={showInCollection} onChange={(event) => handleFilterChange('showInCollection', event.target.checked)} />}
+                        label="Include objects already in My Collection"
                     />
-                    Include objects already in My Collection
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showHasImages}
-                        onChange={(event) => handleFilterChange(event, 'showHasImages')}
+                    <FormControlLabel
+                        control={<Switch checked={showHasImages} onChange={(event) => handleFilterChange('showHasImages', event.target.checked)} />}
+                        label="Only show objects with images"
                     />
-                    Only show objects with images
-                </label>
-                <label>
-                    Sort by Age:
-                    <select value={sortOrder} onChange={handleSortChange}>
-                        <option value="oldestFirst">Oldest First</option>
-                        <option value="newestFirst">Newest First</option>
-                    </select>
-                </label>
-                <label>
-                    Results per page:
-                    <select value={resultsPerPage} onChange={handleResultsPerPageChange}>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </label>
+                </FormControl>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <FormLabel id="sort-label">Sort by Age</FormLabel>
+                    <Select
+                        labelId="sort-label"
+                        id="sort"
+                        value={sortOrder}
+                        onChange={handleSortChange}
+                        label="Sort by Age"
+                    >
+                        <MenuItem value="oldestFirst">Oldest First</MenuItem>
+                        <MenuItem value="newestFirst">Newest First</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <FormLabel id="results-per-page-label">Results per page</FormLabel>
+                    <Select
+                        labelId="results-per-page-label"
+                        id="results-per-page"
+                        value={resultsPerPage}
+                        onChange={handleResultsPerPageChange}
+                        label="Results per page"
+                    >
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={50}>50</MenuItem>
+                        <MenuItem value={100}>100</MenuItem>
+                    </Select>
+                </FormControl>
             </div>
-            <div className={styles.pagination}>
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage <= 1}>Previous</button>
+            <div>
+                <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
+                    Previous
+                </Button>
                 <span>Page {currentPage}</span>
-                <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
             </div>
-        </div>
+        </Stack>
     );
 };
-
 export default SearchForm;
