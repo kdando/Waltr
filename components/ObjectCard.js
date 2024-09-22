@@ -33,7 +33,7 @@ const ObjectCard = ({ object }) => {
                 />
             ) : (
                 <CardContent>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" onClick={openModal} style={{ cursor: 'pointer' }}>
                         No image available
                     </Typography>
                 </CardContent>
