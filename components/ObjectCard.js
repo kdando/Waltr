@@ -10,7 +10,10 @@ const ObjectCard = ({ object }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { collection, addToCollection, removeFromCollection } = useContext(CollectionContext);
-    const isInCollection = collection.some((obj) => obj.objectID === object.objectID);
+    const isInCollection = collection.some((obj) => {
+        // Check for both objectId and the prefix to identify objects from different APIs
+        return obj.objectId === object.objectId || (obj.objectId.startsWith('VNA-') && obj.objectId.split('-')[1] === object.systemNumber);
+    });
 
     const openModal = () => {
         setIsModalOpen(true);

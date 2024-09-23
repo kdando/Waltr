@@ -19,14 +19,15 @@ async function fetchObjectMet(objectId) {
 }
 
 async function fetchObjectVnA(systemNumber) {
-    const apiUrl = `${VNA_API_URL}/museumobject/${systemNumber}`;
-
     try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(`${VNA_API_URL}/museumobject/${systemNumber}`);
         const data = response.data.record;
 
+        // Generate a unique objectID based on systemNumber and another unique identifier (e.g., objectNumber)
+        const newObjectID = `VNA-${data.systemNumber}-${data.objectNumber}`;
+
         const newObject = {
-            objectId: data.systemNumber,
+            objectId: newObjectID, // Use the unique objectID here
             title: data.titles[0]?.title || '',
             objectName: data.objectType || '',
             objectDate: data.productionDates[0]?.date?.text || '',
