@@ -7,6 +7,7 @@ import ObjectCard from '../components/ObjectCard';
 import Navbar from '../components/Navbar';
 import CustomModal from '../components/Modal';
 import SearchForm from '../components/SearchForm';
+import PaginationControls from '../components/PaginationControls';
 import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
 import Loading from '../components/Loading';
@@ -73,6 +74,11 @@ const Search = () => {
         }
     });
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        handleSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, page);
+    };
+
     return (
         <div>
             <Navbar />
@@ -97,22 +103,15 @@ const Search = () => {
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
             />
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <div className={styles.grid}>
-                    {sortedResults.map((result, index) => (
-                        <ObjectCard key={index} object={result} onImageClick={openModal} />
-                    ))}
-                </div>
-            )}
-            <CustomModal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                content={modalContent}
+            {isLoading ? <Loading /> : <div className={styles.grid}>{sortedResults.map((result, index) => (<ObjectCard key={index} object={result} onImageClick={openModal} />))}</div>}
+            <PaginationControls
+                currentPage={currentPage}
+                totalPages={Math.ceil(searchResults.length / resultsPerPage)}
+                onPageChange={handlePageChange}
             />
+            <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} content={modalContent} />
         </div>
     );
 };
 
-export default Search;
+export default Search;  
