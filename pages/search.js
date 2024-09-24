@@ -103,12 +103,22 @@ const Search = () => {
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
             />
-            {isLoading ? <Loading /> : <div className={styles.grid}>{sortedResults.map((result, index) => (<ObjectCard key={index} object={result} onImageClick={openModal} />))}</div>}
-            <PaginationControls
-                currentPage={currentPage}
-                totalPages={Math.ceil(searchResults.length / resultsPerPage)}
-                onPageChange={handlePageChange}
-            />
+            {isLoading ?
+                <Loading /> :
+                // SEARCH RESULTS AND PAGE CONTROLS
+                <div>
+                    <PaginationControls
+                        currentPage={currentPage}
+                        onPageChange={(page) => setCurrentPage(page)} />
+
+                    <div className={styles.grid}>{sortedResults.map((result, index) => (<ObjectCard key={index} object={result} onImageClick={openModal} />))}
+                    </div>
+
+                    <PaginationControls
+                        currentPage={currentPage}
+                        onPageChange={(page) => setCurrentPage(page)} />
+                </div>
+            }
             <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} content={modalContent} />
         </div>
     );

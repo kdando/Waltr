@@ -100,13 +100,6 @@ const SearchForm = ({
                     </Select>
                 </FormControl>
             </div>
-            <div>
-                <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
-                    Previous
-                </Button>
-                <span>Page {currentPage}</span>
-                <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
-            </div>
         </Stack>
     );
 };
