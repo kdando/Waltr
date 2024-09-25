@@ -1,9 +1,9 @@
-// pages/my-collection.js
-
 import React, { useState, useContext } from 'react';
 import { CollectionContext } from '../contexts/CollectionContext';
 import Navbar from '../components/Navbar';
 import ObjectCard from '../components/ObjectCard';
+import { Container, Typography, Box, Modal } from '@mui/material';
+import Grid from '@mui/material/Grid2'; // Grid v2
 
 const MyCollection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,17 +20,44 @@ const MyCollection = () => {
     };
 
     return (
-        <div>
+        <Container maxWidth="lg">
             <Navbar />
-            <main >
-                <h1 >My Collection</h1>
-                <div >
+            <Box
+                component="main"
+                sx={{
+                    minHeight: '100vh',
+                    padding: { xs: 2, md: 4 },
+                    textAlign: 'center'
+                }}
+            >
+                <Typography variant="h1" component="h1" gutterBottom>
+                    My Collection
+                </Typography>
+
+                <Grid container spacing={3} justifyContent="center">
                     {collection.map((object, index) => (
-                        <ObjectCard key={index} object={object} onImageClick={openModal} />
+                        <Grid xs={12} sm={6} md={4} key={index}>
+                            <ObjectCard object={object} onImageClick={openModal} />
+                        </Grid>
                     ))}
-                </div>
-            </main>
-        </div>
+                </Grid>
+            </Box>
+
+            <Modal
+                open={isModalOpen}
+                onClose={closeModal}
+                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+                <Box sx={{ bgcolor: 'background.paper', padding: 4, borderRadius: 2 }}>
+                    <Typography variant="h6" component="h2">
+                        {modalContent.name}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                        {modalContent.description}
+                    </Typography>
+                </Box>
+            </Modal>
+        </Container>
     );
 };
 

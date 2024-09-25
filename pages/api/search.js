@@ -23,11 +23,11 @@ async function fetchObjectVnA(systemNumber) {
         const response = await axios.get(`${VNA_API_URL}/museumobject/${systemNumber}`);
         const data = response.data.record;
 
-        // Generate a unique objectID based on systemNumber and another unique identifier (e.g., objectNumber)
-        const newObjectId = `VNA-${data.systemNumber}-${data.objectNumber}`;
+        // // Generate a unique objectID based on systemNumber and another unique identifier (e.g., objectNumber)
+        // const newObjectId = `VNA-${data.systemNumber}-${data.objectNumber}`;
 
         const newObject = {
-            objectID: newObjectId, // Use the unique objectID here
+            objectID: systemNumber, // Use the V&A systemNumber for the objectID field so result object matches shape of Met API result
             title: data.titles[0]?.title || '',
             objectName: data.objectType || '',
             objectDate: data.productionDates[0]?.date?.text || '',
