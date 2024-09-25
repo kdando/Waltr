@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { CollectionContext } from '../contexts/CollectionContext';
-import Navbar from '../components/Navbar';
+
 import ObjectCard from '../components/ObjectCard';
-import { Container, Typography, Box, Modal } from '@mui/material';
+import { Typography, Box, Modal } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 
 const MyCollection = () => {
@@ -20,8 +20,7 @@ const MyCollection = () => {
     };
 
     return (
-        <Container maxWidth="lg">
-            <Navbar />
+        <>
             <Box
                 component="main"
                 sx={{
@@ -57,7 +56,7 @@ const MyCollection = () => {
                     </Typography>
                 </Box>
             </Modal>
-        </Container>
+        </>
     );
 };
 
