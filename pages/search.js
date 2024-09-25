@@ -7,6 +7,7 @@ import ObjectCard from '../components/ObjectCard';
 import Navbar from '../components/Navbar';
 import CustomModal from '../components/Modal';
 import SearchForm from '../components/SearchForm';
+import PaginationControls from '../components/PaginationControls';
 import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
 import Loading from '../components/Loading';
@@ -55,7 +56,7 @@ const Search = () => {
     };
 
     const filteredResults = searchResults.filter((result) => {
-        const inCollection = collection.some((obj) => obj.objectID === result.objectID);
+        const inCollection = collection.some((obj) => obj.objectId === result.objectId);
         if (!showInCollection && inCollection) {
             return false;
         }
@@ -72,6 +73,11 @@ const Search = () => {
             return b.objectBeginDate - a.objectBeginDate;
         }
     });
+
+    // const handlePageChange = (page) => {
+    //     setCurrentPage(page);
+    //     handleSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, page);
+    // };
 
     return (
         <div>
@@ -97,22 +103,25 @@ const Search = () => {
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
             />
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <div className={styles.grid}>
-                    {sortedResults.map((result, index) => (
-                        <ObjectCard key={index} object={result} onImageClick={openModal} />
-                    ))}
+            {isLoading ?
+                <Loading /> :
+                // SEARCH RESULTS AND PAGE CONTROLS
+                <div>
+                    <PaginationControls
+                        currentPage={currentPage}
+                        onPageChange={(page) => setCurrentPage(page)} />
+
+                    <div className={styles.grid}>{sortedResults.map((result, index) => (<ObjectCard key={index} object={result} onImageClick={openModal} />))}
+                    </div>
+
+                    <PaginationControls
+                        currentPage={currentPage}
+                        onPageChange={(page) => setCurrentPage(page)} />
                 </div>
-            )}
-            <CustomModal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                content={modalContent}
-            />
+            }
+            <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} content={modalContent} />
         </div>
     );
 };
 
-export default Search;
+export default Search;  

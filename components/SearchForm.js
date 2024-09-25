@@ -18,6 +18,11 @@ const SearchForm = ({
     currentPage,
     onPageChange,
 }) => {
+
+    useEffect(() => {
+        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
+    }, [currentPage, resultsPerPage]);
+
     const handleSearch = async (event) => {
         event.preventDefault();
         onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
@@ -29,14 +34,6 @@ const SearchForm = ({
         onResultsPerPageChange(newResultsPerPage);
         onPageChange(1);
     };
-
-    const handlePageChange = (page) => {
-        onPageChange(page);
-    };
-
-    useEffect(() => {
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
-    }, [currentPage, resultsPerPage]);
 
     const handleFilterChange = (filterType, value) => {
         onFilterChange(filterType, value);
@@ -85,7 +82,7 @@ const SearchForm = ({
                     </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 120 }}>
-                    <FormLabel id="results-per-page-label">Results per page</FormLabel>
+                    <FormLabel id="results-per-page-label">Max results per page</FormLabel>
                     <Select
                         labelId="results-per-page-label"
                         id="results-per-page"
@@ -99,13 +96,6 @@ const SearchForm = ({
                         <MenuItem value={100}>100</MenuItem>
                     </Select>
                 </FormControl>
-            </div>
-            <div>
-                <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
-                    Previous
-                </Button>
-                <span>Page {currentPage}</span>
-                <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
             </div>
         </Stack>
     );
