@@ -17,7 +17,7 @@ const Search = () => {
     const [modalContent, setModalContent] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
-    const [showHasImages, setShowHasImages] = useState(true);
+    const [showHasImages, setShowHasImages] = useState(false);
     const [sortOrder, setSortOrder] = useState('oldestFirst');
     const { collection } = useContext(CollectionContext);
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ const Search = () => {
         try {
             const response = await axios.get(`/api/search`, {
                 params: {
-                    query: searchQuery,
+                    searchTerm: searchQuery,
                     showInCollection,
                     showHasImages,
                     sortOrder,

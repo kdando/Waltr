@@ -45,73 +45,56 @@ async function fetchObjectVnA(systemNumber) {
 }
 
 export default async function handler(req, res) {
-    // Destructure query parameters
-    const { query, showInCollection, showHasImages, sortOrder, resultsPerPage = 10, currentPage = 1 } = req.query;
+    const { searchTerm, showInCollection, showHasImages, sortOrder, resultsPerPage = 10, currentPage = 1 } = req.query;
 
+    // Validate query parameter
+    if (!searchTerm || typeof searchTerm !== 'string') {
+        return res.status(400).json({ message: 'Invalid query parameter' });
+    }
+
+    // Parse pagination parameters
+    const parsedCurrentPage = parseInt(currentPage, 10);
+    const parsedResultsPerPage = parseInt(resultsPerPage, 10);
+
+    // Validate results per page and current page parameters
+    if (!Number.isInteger(parsedCurrentPage) || parsedCurrentPage <= 0) {
+        return res.status(400).json({ message: 'Invalid currentPage parameter' });
+    }
+
+    if (!Number.isInteger(parsedResultsPerPage) || parsedResultsPerPage <= 0) {
+        return res.status(400).json({ message: 'Invalid resultsPerPage parameter' });
+    }
+
+    // MAIN API QUERYING LOGIC
     try {
-        // Validate query parameter
-        if (!query || typeof query !== 'string') {
-            return res.status(400).json({ message: 'Invalid query parameter' });
-        }
+        console.log("HELLO KARL, LOOK HERE PAL");
+        console.log("THIS IS THE QUERY VARIABLE, BEING EMBEDDED IN PINGS TO APIS:");
+        console.log(searchTerm);
+        console.log("GOT IT?");
 
-        try {
-            // Fetch data from both APIs
-            console.log("HELLO KARL, LOOK HERE PAL")
-            console.log("THIS IS THE QUERY VARIABLE, BEING EMBEDDED IN PINGS TO APIS:")
-            console.log(query)
-            console.log("GOT IT?")
+        // Fetch data from both APIs
+        const [metResponse, vnaResponse] = await Promise.all([
+            axios.get(`${MET_API_URL}/search?q=${searchTerm}`),
+            axios.get(`${VNA_API_URL}/objects/search?q=${searchTerm}`)
+        ]);
 
-            const metResponse = await axios.get(`${MET_API_URL}/search?q=${query}`);
-            const vnaResponse = await axios.get(`${VNA_API_URL}/objects/search?q=${query}`);
+        const metObjectIds = metResponse.data.objectIDs || [];
+        const vnaSystemNumbers = vnaResponse.data.records?.map((record) => record.systemNumber) || [];
 
-            const metObjectIds = metResponse.data.objectIDs || [];
-            const vnaSystemNumbers = vnaResponse.data.records?.map((record) => record.systemNumber) || [];
+        // Calculate pagination indices
+        const startIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
+        const endIndex = startIndex + parsedResultsPerPage;
 
-            // Calculate pagination indices
-            const startIndex = (currentPage - 1) * resultsPerPage;
-            const endIndex = startIndex + parseInt(resultsPerPage, 10);
+        // Fetch objects from both APIs based on the pagination
+        const metObjectsPromises = metObjectIds.slice(startIndex, endIndex).map(fetchObjectMet);
+        const vnaObjectsPromises = vnaSystemNumbers.slice(startIndex, endIndex).map(fetchObjectVnA);
 
-            // Fetch objects from both APIs based on the pagination
-            const metObjectsPromises = metObjectIds.slice(startIndex, endIndex).map(fetchObjectMet);
-            const vnaObjectsPromises = vnaSystemNumbers.slice(startIndex, endIndex).map(fetchObjectVnA);
+        const metObjects = await Promise.all(metObjectsPromises);
+        const vnaObjects = await Promise.all(vnaObjectsPromises);
 
-            const metObjects = await Promise.all(metObjectsPromises);
-            const vnaObjects = await Promise.all(vnaObjectsPromises);
-
-            const allObjects = [...metObjects, ...vnaObjects].filter((obj) => obj !== null);
-
-            let filteredResults = allObjects;
-
-            // if (sortOrder === 'newestFirst') {
-            //     filteredResults = filteredResults.sort((a, b) => {
-            //         const dateA = a.objectBeginDate || a.objectDate;
-            //         const dateB = b.objectBeginDate || b.objectDate;
-            //         return dateB - dateA;
-            //     });
-            // } else {
-            //     filteredResults = filteredResults.sort((a, b) => {
-            //         const dateA = a.objectBeginDate || a.objectDate;
-            //         const dateB = b.objectBeginDate || b.objectDate;
-            //         return dateA - dateB;
-            //     });
-            // }
-
-            res.json(filteredResults);
-        } catch (error) {
-            console.error('Error fetching data from APIs:', error);
-            res.status(500).json({ message: 'Internal Server Error' });
-        }
-
-        // Add a check to ensure currentPage is a positive integer
-        if (!Number.isInteger(parseInt(currentPage)) || parseInt(currentPage) <= 0) {
-            return res.status(400).json({ message: 'Invalid currentPage parameter' });
-        }
-
-        // Add a check to ensure resultsPerPage is a positive integer
-        if (!Number.isInteger(parseInt(resultsPerPage)) || parseInt(resultsPerPage) <= 0) {
-            return res.status(400).json({ message: 'Invalid resultsPerPage parameter' });
-        }
-
+        // Combine and filter results
+        const allObjects = [...metObjects, ...vnaObjects].filter((obj) => obj !== null);
+        res.json(allObjects);
     } catch (error) {
         console.error('Error fetching data from APIs:', error);
         res.status(500).json({ message: 'Internal Server Error' });
