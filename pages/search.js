@@ -17,18 +17,20 @@ const Search = () => {
     const [modalContent, setModalContent] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
-    const [showHasImages, setShowHasImages] = useState(true);
+    const [showHasImages, setShowHasImages] = useState(false);
     const [sortOrder, setSortOrder] = useState('oldestFirst');
     const { collection } = useContext(CollectionContext);
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
 
-    const handleSearch = async (query, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage) => {
+    const handleSearch = async () => {
+        if (!searchQuery) return; // Prevent search if query is empty
+
         setIsLoading(true);
         try {
             const response = await axios.get(`/api/search`, {
                 params: {
-                    query,
+                    searchTerm: searchQuery,
                     showInCollection,
                     showHasImages,
                     sortOrder,
@@ -70,6 +72,7 @@ const Search = () => {
         } else if (sortOrder === 'newestFirst') {
             return b.objectBeginDate - a.objectBeginDate;
         }
+        return 0; // Return 0 if sortOrder is not recognized
     });
 
     return (
@@ -110,11 +113,15 @@ const Search = () => {
 
                     {/* Search Results Grid */}
                     <Grid container spacing={3} sx={{ mt: 3 }}>
-                        {sortedResults.map((result, index) => (
-                            <Grid xs={12} sm={6} md={4} lg={3} key={index}>
-                                <ObjectCard object={result} onImageClick={openModal} />
-                            </Grid>
-                        ))}
+                        {sortedResults.length > 0 ? (
+                            sortedResults.map((result, index) => (
+                                <Grid xs={12} sm={6} md={4} lg={3} key={index}>
+                                    <ObjectCard object={result} onImageClick={openModal} />
+                                </Grid>
+                            ))
+                        ) : (
+                            <p>Try searching for something!</p> // Message if no results
+                        )}
                     </Grid>
 
                     {/* Pagination Controls (Bottom) */}
