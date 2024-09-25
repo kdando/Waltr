@@ -56,7 +56,7 @@ const Search = () => {
     };
 
     const filteredResults = searchResults.filter((result) => {
-        const inCollection = collection.some((obj) => obj.objectID === result.objectID);
+        const inCollection = collection.some((obj) => obj.objectId === result.objectId);
         if (!showInCollection && inCollection) {
             return false;
         }
@@ -74,10 +74,10 @@ const Search = () => {
         }
     });
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-        handleSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, page);
-    };
+    // const handlePageChange = (page) => {
+    //     setCurrentPage(page);
+    //     handleSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, page);
+    // };
 
     return (
         <div>

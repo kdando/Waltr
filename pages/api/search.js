@@ -24,10 +24,10 @@ async function fetchObjectVnA(systemNumber) {
         const data = response.data.record;
 
         // Generate a unique objectID based on systemNumber and another unique identifier (e.g., objectNumber)
-        const newObjectID = `VNA-${data.systemNumber}-${data.objectNumber}`;
+        const newObjectId = `VNA-${data.systemNumber}-${data.objectNumber}`;
 
         const newObject = {
-            objectId: newObjectID, // Use the unique objectID here
+            objectID: newObjectId, // Use the unique objectID here
             title: data.titles[0]?.title || '',
             objectName: data.objectType || '',
             objectDate: data.productionDates[0]?.date?.text || '',
@@ -77,19 +77,19 @@ export default async function handler(req, res) {
 
             let filteredResults = allObjects;
 
-            if (sortOrder === 'newestFirst') {
-                filteredResults = filteredResults.sort((a, b) => {
-                    const dateA = a.objectBeginDate || a.objectDate;
-                    const dateB = b.objectBeginDate || b.objectDate;
-                    return dateB - dateA;
-                });
-            } else {
-                filteredResults = filteredResults.sort((a, b) => {
-                    const dateA = a.objectBeginDate || a.objectDate;
-                    const dateB = b.objectBeginDate || b.objectDate;
-                    return dateA - dateB;
-                });
-            }
+            // if (sortOrder === 'newestFirst') {
+            //     filteredResults = filteredResults.sort((a, b) => {
+            //         const dateA = a.objectBeginDate || a.objectDate;
+            //         const dateB = b.objectBeginDate || b.objectDate;
+            //         return dateB - dateA;
+            //     });
+            // } else {
+            //     filteredResults = filteredResults.sort((a, b) => {
+            //         const dateA = a.objectBeginDate || a.objectDate;
+            //         const dateB = b.objectBeginDate || b.objectDate;
+            //         return dateA - dateB;
+            //     });
+            // }
 
             res.json(filteredResults);
         } catch (error) {
