@@ -61,7 +61,7 @@ const SearchForm = ({
 
             {/* Filters and Sort Options */}
             <Grid container spacing={2} justifyContent="space-between">
-                <Grid item>
+                <Grid>
                     <FormControlLabel
                         control={
                             <Switch
@@ -69,10 +69,10 @@ const SearchForm = ({
                                 onChange={(event) => handleFilterChange('showInCollection', event.target.checked)}
                             />
                         }
-                        label="Include objects already in My Collection"
+                        label="Show objects already in My Collection"
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControlLabel
                         control={
                             <Switch
@@ -83,7 +83,7 @@ const SearchForm = ({
                         label="Only show objects with images"
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControl sx={{ minWidth: 120 }}>
                         <FormLabel id="sort-label">Sort by Age</FormLabel>
                         <Select
@@ -98,9 +98,9 @@ const SearchForm = ({
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControl sx={{ minWidth: 120 }}>
-                        <FormLabel id="results-per-page-label">Max results per page</FormLabel>
+                        <FormLabel id="results-per-page-label">Max results shown per page</FormLabel>
                         <Select
                             labelId="results-per-page-label"
                             id="results-per-page"

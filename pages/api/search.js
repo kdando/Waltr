@@ -56,6 +56,11 @@ export default async function handler(req, res) {
 
         try {
             // Fetch data from both APIs
+            console.log("HELLO KARL, LOOK HERE PAL")
+            console.log("THIS IS THE QUERY VARIABLE, BEING EMBEDDED IN PINGS TO APIS:")
+            console.log(query)
+            console.log("GOT IT?")
+
             const metResponse = await axios.get(`${MET_API_URL}/search?q=${query}`);
             const vnaResponse = await axios.get(`${VNA_API_URL}/objects/search?q=${query}`);
 
