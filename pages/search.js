@@ -54,7 +54,7 @@ const Search = () => {
     };
 
     const filteredResults = searchResults.filter((result) => {
-        const inCollection = collection.some((obj) => obj.objectId === result.objectId);
+        const inCollection = collection.some((obj) => obj.objectID === result.objectID);
         if (!showInCollection && inCollection) {
             return false;
         }
