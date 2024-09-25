@@ -1,18 +1,18 @@
 import Head from 'next/head';
-import Navbar from '../components/Navbar';
+
 import { Container, Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 
 export default function Home() {
   return (
-    <Container maxWidth="lg">
+    <>
       <Head>
         <title>Waltr</title>
         <meta name="description" content="Explore and curate your own art collection" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
+
       <Grid
         container
         component="main"
@@ -41,9 +41,15 @@ export default function Home() {
             >
               Start exploring and curating your own collection of artefacts from the world's museums.
             </Typography>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              "Every passion borders on the chaotic, but the collector's passion borders on the chaos of memories."
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 1 }}>
+              - Walter Benjamin
+            </Typography>
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 }

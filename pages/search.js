@@ -1,22 +1,20 @@
-// pages/search.js
-
-import styles from '../styles/Search.module.css';
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import ObjectCard from '../components/ObjectCard';
-import Navbar from '../components/Navbar';
 import CustomModal from '../components/Modal';
 import SearchForm from '../components/SearchForm';
 import PaginationControls from '../components/PaginationControls';
 import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
 import Loading from '../components/Loading';
+import { Box } from '@mui/material';
+import Grid from '@mui/material/Grid2'
 
 const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const { isLoading, setIsLoading } = useLoading();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState("")
+    const [modalContent, setModalContent] = useState("");
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
     const [showHasImages, setShowHasImages] = useState(true);
@@ -56,7 +54,7 @@ const Search = () => {
     };
 
     const filteredResults = searchResults.filter((result) => {
-        const inCollection = collection.some((obj) => obj.objectId === result.objectId);
+        const inCollection = collection.some((obj) => obj.objectID === result.objectID);
         if (!showInCollection && inCollection) {
             return false;
         }
@@ -74,14 +72,9 @@ const Search = () => {
         }
     });
 
-    // const handlePageChange = (page) => {
-    //     setCurrentPage(page);
-    //     handleSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, page);
-    // };
-
     return (
-        <div>
-            <Navbar />
+        <Box sx={{ py: 4 }}>
+            {/* Search Form */}
             <SearchForm
                 searchQuery={searchQuery}
                 showInCollection={showInCollection}
@@ -103,25 +96,43 @@ const Search = () => {
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
             />
-            {isLoading ?
-                <Loading /> :
-                // SEARCH RESULTS AND PAGE CONTROLS
-                <div>
+
+            {/* Loading Spinner */}
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <Box>
+                    {/* Pagination Controls (Top) */}
                     <PaginationControls
                         currentPage={currentPage}
-                        onPageChange={(page) => setCurrentPage(page)} />
+                        onPageChange={(page) => setCurrentPage(page)}
+                    />
 
-                    <div className={styles.grid}>{sortedResults.map((result, index) => (<ObjectCard key={index} object={result} onImageClick={openModal} />))}
-                    </div>
+                    {/* Search Results Grid */}
+                    <Grid container spacing={3} sx={{ mt: 3 }}>
+                        {sortedResults.map((result, index) => (
+                            <Grid xs={12} sm={6} md={4} lg={3} key={index}>
+                                <ObjectCard object={result} onImageClick={openModal} />
+                            </Grid>
+                        ))}
+                    </Grid>
 
+                    {/* Pagination Controls (Bottom) */}
                     <PaginationControls
                         currentPage={currentPage}
-                        onPageChange={(page) => setCurrentPage(page)} />
-                </div>
-            }
-            <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} content={modalContent} />
-        </div>
+                        onPageChange={(page) => setCurrentPage(page)}
+                    />
+                </Box>
+            )}
+
+            {/* Modal */}
+            <CustomModal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                content={modalContent}
+            />
+        </Box>
     );
 };
 
-export default Search;  
+export default Search;
