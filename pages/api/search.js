@@ -5,6 +5,16 @@ import axios from 'axios';
 const MET_API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1';
 const VNA_API_URL = 'https://api.vam.ac.uk/v2';
 
+//FUNCTION FOR BUILDING IIIF URLS FOR V&A OBJECTS
+function constructIIIFImageURLs(imageIIIFNumbers) {
+    const baseIIIFURL = "https://framemark.vam.ac.uk/collections/";
+    const completedImageURLs = imageIIIFNumbers.map(imageID => {
+        return `${baseIIIFURL}${imageID}/full/!200,200/0/default.jpg`
+    });
+    return completedImageURLs;
+}
+
+//FUNCTION FOR FETCHING INDIVIDUAL OBJECT FROM MET
 async function fetchObjectMet(objectId) {
     try {
         const result = await axios.get(`${MET_API_URL}/objects/${objectId}`);
@@ -18,16 +28,28 @@ async function fetchObjectMet(objectId) {
     }
 }
 
+//FUNCTION FOR FETCHING INDIVIDUAL OBJECT FROM V&A
 async function fetchObjectVnA(systemNumber) {
     try {
         const response = await axios.get(`${VNA_API_URL}/museumobject/${systemNumber}`);
+
+        if (response.data.detail === 'Not Found') {
+            return null;
+        }
+
         const data = response.data.record;
 
-        // // Generate a unique objectID based on systemNumber and another unique identifier (e.g., objectNumber)
-        // const newObjectId = `VNA-${data.systemNumber}-${data.objectNumber}`;
+        ///// BUILDING PATHS FOR IIIF IMAGES
+        let objectImages = [];
+
+        if (data.images.length > 0) {
+            objectImages = constructIIIFImageURLs(data.images)
+        }
+        ////
+
 
         const newObject = {
-            objectID: systemNumber, // Use the V&A systemNumber for the objectID field so result object matches shape of Met API result
+            objectID: systemNumber,
             title: data.titles[0]?.title || '',
             objectName: data.objectType || '',
             objectDate: data.productionDates[0]?.date?.text || '',
@@ -35,7 +57,11 @@ async function fetchObjectVnA(systemNumber) {
             period: `${data.productionDates[0]?.date?.earliest || ''} to ${data.productionDates[0]?.date?.latest || ''}`,
             repository: 'Victoria and Albert Museum, London',
             objectURL: `https://collections.vam.ac.uk/item/${data.systemNumber}/`,
+            primaryImageSmall: objectImages[0] ? objectImages[0] : null,
+            objectImages: objectImages.length > 0 ? objectImages : null
         };
+
+        console.log(newObject); ///////LOGGING NEW OBJECT
 
         return newObject;
     } catch (error) {
