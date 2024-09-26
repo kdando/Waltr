@@ -134,16 +134,19 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         {content.objectName}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Period:</strong> {content.period}
+                        From {content.culture}
+                    </Typography>
+                    {/* <Typography variant="body2" color="text.secondary" gutterBottom>
+                        <strong>Created:</strong> {content.objectDate}
+                    </Typography> */}
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                        {content.period}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                        {content.briefDescription}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         <strong>Repository:</strong> {content.repository}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Date:</strong> {content.objectDate}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Culture:</strong> {content.culture}
                     </Typography>
                     <Button
                         size="small"

@@ -2,6 +2,8 @@
 
 import axios from 'axios';
 
+import { describePeriod } from '@/utils/apiHelpers';
+
 /*
 
 WE NORMALISE API RESULTS TO AN OBJECT THE FOLLOWING SHAPE FOR CONSISTENCY.
@@ -94,6 +96,13 @@ async function fetchObjectVnA(systemNumber) {
             objectImages = constructIIIFImageURLs(data.images)
         }
 
+        // CREATING PERIOD STRING BASED ON DATES
+        let objectPeriod = "";
+        if (data.productionDates[0].date.earliest && data.productionDates[0].date.latest) {
+            objectPeriod = describePeriod(data.productionDates[0].date.earliest, data.productionDates[0].date.latest)
+        }
+
+
         //NORMALISING V&A RESULT
         const newObject = {
             objectID: systemNumber,
@@ -101,7 +110,7 @@ async function fetchObjectVnA(systemNumber) {
             objectName: data.objectType || '',
             objectDate: data.productionDates[0]?.date?.text || '',
             culture: data.placesOfOrigin?.[0]?.place?.text || '',
-            period: `${data.productionDates[0]?.date?.earliest || ''} to ${data.productionDates[0]?.date?.latest || ''}`,
+            period: objectPeriod,
             briefDescription: data.briefDescription || '',
             repository: 'Victoria and Albert Museum, London',
             objectURL: `https://collections.vam.ac.uk/item/${data.systemNumber}/`,

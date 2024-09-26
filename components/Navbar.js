@@ -1,7 +1,7 @@
 // components/Navbar.js
 
-import { Button, AppBar, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
+import { Button, AppBar, Toolbar, Typography } from '@mui/material';
 
 const Navbar = () => {
     return (
