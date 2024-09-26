@@ -1,14 +1,22 @@
 // components/Layout.js
+
 import React from 'react';
 import Navbar from './Navbar';
 import { Container } from '@mui/material';
+import Head from 'next/head';
 
 const Layout = ({ children }) => {
     return (
         <>
-            <Navbar /> {/* This will now appear on every page */}
+            <Head>
+                <title>Waltr</title>
+                <meta name="description" content="Explore and curate your own art collection" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <Navbar />
             <Container maxWidth="lg">
-                {children} {/* This is where the individual page content will be rendered */}
+                {children}
             </Container>
         </>
     );
