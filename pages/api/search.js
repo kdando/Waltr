@@ -6,7 +6,7 @@ import axios from 'axios';
 
 WE NORMALISE API RESULTS TO AN OBJECT THE FOLLOWING SHAPE FOR CONSISTENCY.
 This is partly-based on the Met API response, with some changes.
-All frontend logic expects results in this shape.
+All frontend logic expects results in this shape, all backend calls must normalise results to it.
 
  const newObject = {
             objectID: <number>
@@ -41,10 +41,35 @@ function constructIIIFImageURLs(imageIIIFNumbers) {
 async function fetchObjectMet(objectId) {
     try {
         const result = await axios.get(`${MET_API_URL}/objects/${objectId}`);
+
+        // Validate result was genuine
         if (result.data.message === 'Not a valid object') {
             return null;
         }
-        return result.data;
+
+        const data = result.data
+
+        let objectImages = [data.primaryImageSmall]
+
+        //NORMALISING MET RESULT
+        const newObject = {
+            objectID: data.objectID,
+            title: data.title || '',
+            objectName: data.objectName || '',
+            objectDate: data.objectDate || '',
+            culture: data.culture || '',
+            period: data.period || '',
+            briefDescription: data.briefDescription || '',
+            repository: data.repository,
+            objectURL: data.objectURL,
+            primaryImageSmall: data.primaryImageSmall || null,
+            objectImages: objectImages.length > 0 ? objectImages : null
+        };
+        console.log("HERES THE NEW OBJECT FROM MET")
+        console.log(newObject)
+        return newObject;
+
+
     } catch (error) {
         console.error(`Error fetching object ID ${objectId} from MET:`, error);
         return null;
@@ -56,6 +81,7 @@ async function fetchObjectVnA(systemNumber) {
     try {
         const response = await axios.get(`${VNA_API_URL}/museumobject/${systemNumber}`);
 
+        // Validate result was genuine
         if (response.data.detail === 'Not Found') {
             return null;
         }
@@ -64,14 +90,11 @@ async function fetchObjectVnA(systemNumber) {
 
         ///// BUILDING PATHS FOR IIIF IMAGES
         let objectImages = [];
-
         if (data.images.length > 0) {
             objectImages = constructIIIFImageURLs(data.images)
         }
-        ////
 
-
-        //NORMALISING V&A RESULTS TO MET SHAPE
+        //NORMALISING V&A RESULT
         const newObject = {
             objectID: systemNumber,
             title: data.titles[0]?.title || '',
@@ -85,8 +108,6 @@ async function fetchObjectVnA(systemNumber) {
             primaryImageSmall: objectImages[0] ? objectImages[0] : null,
             objectImages: objectImages.length > 0 ? objectImages : null
         };
-
-        console.log(newObject); ///////LOGGING NEW OBJECT
 
         return newObject;
     } catch (error) {
