@@ -8,7 +8,7 @@ const Navbar = () => {
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    My App
+                    Waltr
                 </Typography>
                 <Button color="inherit" component={Link} href="/">
                     Welcome
