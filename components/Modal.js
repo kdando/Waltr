@@ -30,7 +30,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         alignItems: 'center',
                         width: '80%',
                         maxWidth: 800,
-                        bgcolor: 'background.paper', // Use theme background color
+                        bgcolor: 'background.paper',
                         border: '2px solid #000',
                         boxShadow: 24,
                         p: 4,
