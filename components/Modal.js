@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Backdrop, Fade, Box, Typography, ImageList, ImageListItem, ImageListItemBar, Button } from '@mui/material';
+import { Modal, Backdrop, Fade, Box, Typography, ImageList, ImageListItem, Button } from '@mui/material';
 
 const CustomModal = ({ isOpen, onRequestClose, content }) => {
     const handleClose = () => {
@@ -13,35 +13,43 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
             open={isOpen}
             onClose={handleClose}
             closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 500,
-                style: { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-            }}
+        // BackdropComponent={Backdrop}
+        // BackdropProps={{
+        //     timeout: 500,
+        // }} DEPRECATED
         >
             <Fade in={isOpen}>
                 <Box
                     sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        height: '80%',
-                        padding: 2,
+                        width: '80%',
+                        maxWidth: 800,
+                        bgcolor: 'background.paper', // Use theme background color
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
                     }}
                 >
-                    <Box sx={{ width: '50%', maxWidth: '300px', padding: 1 }}>
-                        <ImageList cols={1} rowHeight={164}>
+                    <Box sx={{ flex: 1, maxWidth: '400px', padding: 1 }}>
+                        <ImageList cols={1} rowHeight={164} style={{ height: 164 }}>
                             <ImageListItem key={content.primaryImageSmall}>
                                 <img
                                     src={content.primaryImageSmall}
                                     alt={content.title}
                                     loading="lazy"
-                                    style={{ width: '100%', height: 'auto' }}
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                                 />
                             </ImageListItem>
                         </ImageList>
                     </Box>
-                    <Box sx={{ width: '50%', maxWidth: '300px', padding: 1 }}>
+                    <Box sx={{ flex: 1, maxWidth: '400px', padding: 1 }}>
                         <Typography variant="h4" id="transition-modal-title">
                             {content.title}
                         </Typography>
@@ -72,7 +80,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                 </Box>
             </Fade>
         </Modal>
-    )
+    );
 };
 
 export default CustomModal;

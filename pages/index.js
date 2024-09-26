@@ -1,18 +1,9 @@
-import Head from 'next/head';
-
-import { Container, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>Waltr</title>
-        <meta name="description" content="Explore and curate your own art collection" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-
       <Grid
         container
         component="main"
@@ -21,7 +12,7 @@ export default function Home() {
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          padding: { xs: 2, md: 4 }, // Adjust padding for responsiveness
+          padding: { xs: 2, md: 4 }
         }}
       >
         <Grid xs={12} sm={8} md={6}>
