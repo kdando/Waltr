@@ -1,0 +1,226 @@
+{
+    "meta": {
+        "version": "2.1",
+        "images": {
+            "_primary_thumbnail": "https://framemark.vam.ac.uk/collections/2010EH1952/full/!100,100/0/default.jpg",
+            "_iiif_image": "https://framemark.vam.ac.uk/collections/2010EH1952/",
+            "_alt_iiif_image": [],
+            "imageResolution": "low",
+            "_images_meta": [
+                {
+                    "assetRef": "2010EH1952",
+                    "copyright": "© Victoria and Albert Museum, London",
+                    "sensitiveImage": false
+                },
+                {
+                    "assetRef": "2006AL3412",
+                    "copyright": "© Victoria and Albert Museum, London",
+                    "sensitiveImage": false
+                }
+            ]
+        },
+        "see_also": null
+    },
+    "record": {
+        "systemNumber": "O163544",
+        "accessionNumber": "CIRC.253&A-1970",
+        "objectType": "Cup and saucer",
+        "titles": [
+            {
+                "title": "Tulip",
+                "type": "manufacturer's title"
+            }
+        ],
+        "summaryDescription": "",
+        "physicalDescription": "Cup and saucer of bone china partly-painted and partly-transfer-printed with a floral design.",
+        "artistMakerPerson": [],
+        "artistMakerOrganisations": [
+            {
+                "name": {
+                    "text": "Paragon China Limited",
+                    "id": "A20282"
+                },
+                "association": {
+                    "text": "maker",
+                    "id": "AAT251917"
+                },
+                "note": ""
+            }
+        ],
+        "artistMakerPeople": [],
+        "materials": [
+            {
+                "text": "bone china",
+                "id": "AAT233473"
+            }
+        ],
+        "techniques": [
+            {
+                "text": "painted",
+                "id": "AAT54216"
+            },
+            {
+                "text": "transfer-printed",
+                "id": "AAT53922"
+            }
+        ],
+        "materialsAndTechniques": "Bone china partly-painted and partly-transfer-printed",
+        "categories": [
+            {
+                "text": "Ceramics",
+                "id": "THES48982"
+            },
+            {
+                "text": "Bone China",
+                "id": "THES48987"
+            }
+        ],
+        "styles": [],
+        "collectionCode": {
+            "text": "CER",
+            "id": "THES48594"
+        },
+        "images": [
+            "2010EH1952",
+            "2006AL3412"
+        ],
+        "imageResolution": "low",
+        "galleryLocations": [
+            {
+                "current": {
+                    "text": "139",
+                    "id": "THES49874"
+                },
+                "free": "",
+                "case": "40",
+                "shelf": "6",
+                "box": ""
+            },
+            {
+                "current": {
+                    "text": "139",
+                    "id": "THES49874"
+                },
+                "free": "",
+                "case": "40",
+                "shelf": "6",
+                "box": ""
+            }
+        ],
+        "partTypes": [
+            [
+                {
+                    "text": "cup",
+                    "id": ""
+                }
+            ],
+            [
+                {
+                    "text": "Saucer",
+                    "id": ""
+                }
+            ]
+        ],
+        "contentWarnings": [
+            {
+                "apprise": "",
+                "note": ""
+            },
+            {
+                "apprise": "",
+                "note": ""
+            },
+            {
+                "apprise": "",
+                "note": ""
+            }
+        ],
+        "placesOfOrigin": [
+            {
+                "place": {
+                    "text": "Longton",
+                    "id": "x28985"
+                },
+                "association": {
+                    "text": "made",
+                    "id": "x28654"
+                },
+                "note": ""
+            }
+        ],
+        "productionDates": [
+            {
+                "date": {
+                    "text": "1931",
+                    "earliest": "1931-01-01",
+                    "latest": "1931-12-31"
+                },
+                "association": {
+                    "text": "made",
+                    "id": "x28654"
+                },
+                "note": ""
+            }
+        ],
+        "associatedObjects": [],
+        "creditLine": "",
+        "dimensions": [],
+        "dimensionsNote": "",
+        "marksAndInscriptions": [],
+        "objectHistory": "",
+        "historicalContext": "",
+        "briefDescription": "'Tulip' pattern cup and saucer of bone china partly-painted and partly-transfer-printed, made by Paragon China Ltd., Atlas Works, Longton, 1931.",
+        "bibliographicReferences": [],
+        "production": "Made at Paragon China's Atlas Works.",
+        "productionType": {
+            "text": "",
+            "id": ""
+        },
+        "contentDescription": "",
+        "contentPlaces": [],
+        "associatedPlaces": [],
+        "contentPerson": [],
+        "associatedPerson": [],
+        "contentOrganisations": [],
+        "associatedOrganisations": [],
+        "contentPeople": [],
+        "associatedPeople": [],
+        "contentEvents": [],
+        "associatedEvents": [],
+        "contentOthers": [
+            {
+                "text": "flowers",
+                "id": "x35571"
+            }
+        ],
+        "contentConcepts": [],
+        "contentLiteraryRefs": [],
+        "galleryLabels": [
+            {
+                "text": "Cup and saucer 'Tulip'\nmade by Paragon China Ltd., Longton, Stoke-on-Trent, Staffordshire \nThe floral decoration is partly printed and partly painted\n\nCirc.253&A-1970",
+                "date": {
+                    "text": "16/07/2008",
+                    "earliest": "2008-07-16",
+                    "latest": "2008-07-16"
+                }
+            }
+        ],
+        "partNumbers": [
+            "CIRC.253-1970",
+            "CIRC.253A-1970"
+        ],
+        "accessionNumberNum": "253",
+        "accessionNumberPrefix": "CIRC",
+        "accessionYear": 1970,
+        "otherNumbers": [],
+        "copyNumber": "",
+        "aspects": [
+            "WHOLE",
+            "cup",
+            "Saucer"
+        ],
+        "assets": [],
+        "recordModificationDate": "2015-02-04",
+        "recordCreationDate": "2008-07-16"
+    }
+}
