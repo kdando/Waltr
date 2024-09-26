@@ -2,6 +2,29 @@
 
 import axios from 'axios';
 
+/*
+
+WE NORMALISE API RESULTS TO AN OBJECT THE FOLLOWING SHAPE FOR CONSISTENCY.
+This is partly-based on the Met API response, with some changes.
+All frontend logic expects results in this shape.
+
+ const newObject = {
+            objectID: <number>
+            title: <the "display name" of the object>
+            objectName: <the "subtitle" kind of name, more a description, e.g. "cup and saucer">
+            objectDate: <the earliest date, we sort based on this>
+            culture: <what culture the object is from (sometimes this is just the "place")>
+            period: <a period if we have one, a span of dates if not - TO BE AMMENDED>
+            briefDescription: <a description of the object>
+            repository: <where it is, mostly this will reflect which API we called for it>
+            objectURL: <a link to the object's page on the relevant museum website>
+            primaryImageSmall: <the image we use on search results and collection previews>
+            objectImages: ,an ARRAY of urls for all available images of the object from the API>
+        };
+
+*/
+
+// CURRENT APIS IN USE, WHEN ADDING MORE START WITH A CONSTANT HERE
 const MET_API_URL = 'https://collectionapi.metmuseum.org/public/collection/v1';
 const VNA_API_URL = 'https://api.vam.ac.uk/v2';
 
@@ -48,6 +71,7 @@ async function fetchObjectVnA(systemNumber) {
         ////
 
 
+        //NORMALISING V&A RESULTS TO MET SHAPE
         const newObject = {
             objectID: systemNumber,
             title: data.titles[0]?.title || '',
@@ -55,6 +79,7 @@ async function fetchObjectVnA(systemNumber) {
             objectDate: data.productionDates[0]?.date?.text || '',
             culture: data.placesOfOrigin?.[0]?.place?.text || '',
             period: `${data.productionDates[0]?.date?.earliest || ''} to ${data.productionDates[0]?.date?.latest || ''}`,
+            briefDescription: data.briefDescription || '',
             repository: 'Victoria and Albert Museum, London',
             objectURL: `https://collections.vam.ac.uk/item/${data.systemNumber}/`,
             primaryImageSmall: objectImages[0] ? objectImages[0] : null,
