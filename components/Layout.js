@@ -1,11 +1,13 @@
-// components/Layout.js
-
 import React from 'react';
 import Navbar from './Navbar';
 import { Container } from '@mui/material';
 import Head from 'next/head';
+import { useError } from '@/contexts/ErrorContext';
+import Error from './Error';
 
 const Layout = ({ children }) => {
+    const { errorMessage, clearError } = useError();
+
     return (
         <>
             <Head>
@@ -15,7 +17,12 @@ const Layout = ({ children }) => {
             </Head>
 
             <Navbar />
+
             <Container maxWidth="lg">
+                {/* Conditionally render the Error component if there's an error */}
+                {errorMessage && <Error />}
+
+                {/* Main stuff */}
                 {children}
             </Container>
         </>

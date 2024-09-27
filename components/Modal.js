@@ -134,13 +134,13 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         {content.objectName}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                        From {content.culture}
+                        <strong>Culture or Place of Origin:</strong> {content.culture}
                     </Typography>
                     {/* <Typography variant="body2" color="text.secondary" gutterBottom>
                         <strong>Created:</strong> {content.objectDate}
                     </Typography> */}
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {content.period}
+                        <Strong>Period:</Strong> {content.period}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         {content.briefDescription}

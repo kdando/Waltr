@@ -1,4 +1,6 @@
 import { LoadingProvider } from '@/contexts/LoadingContext';
+import { ErrorProvider } from '@/contexts/ErrorContext';
+
 import { CollectionProvider } from '../contexts/CollectionContext';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,11 +13,13 @@ function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <LoadingProvider>
-        <CollectionProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </CollectionProvider>
+        <ErrorProvider>
+          <CollectionProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CollectionProvider>
+        </ErrorProvider>
       </LoadingProvider>
     </ThemeProvider>
   );
