@@ -1,3 +1,4 @@
+// util/apiHelpers.js
 
 // FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES
 function describePeriod(earliestDate, latestDate) {
