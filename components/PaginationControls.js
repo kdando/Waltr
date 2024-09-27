@@ -1,7 +1,7 @@
 // components/PaginationControls.js
 
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 
 const PaginationControls = ({ currentPage, onPageChange }) => {
     const handlePageChange = (page) => {
@@ -9,13 +9,35 @@ const PaginationControls = ({ currentPage, onPageChange }) => {
     };
 
     return (
-        <div>
-            <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                gap: 2,
+                mt: 2,
+            }}
+            role="navigation"
+            aria-label="Pagination Controls"
+        >
+            <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage <= 1}
+                aria-label="Go to previous page"
+            >
                 Previous
             </Button>
-            <span>Page {currentPage}</span>
-            <Button onClick={() => handlePageChange(currentPage + 1)}>Next</Button>
-        </div>
+            <Typography variant="body1" aria-live="polite"> {/* aria-live for announcements */}
+                Page {currentPage}
+            </Typography>
+            <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                aria-label="Go to next page"
+            >
+                Next
+            </Button>
+        </Box>
     );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormControl, FormLabel, FormControlLabel, Switch, Select, MenuItem, Button, TextField, Stack, Box } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid2';
 
 const SearchForm = ({
     searchQuery,
@@ -52,38 +52,41 @@ const SearchForm = ({
                         onChange={(event) => onSearchQueryChange(event.target.value)}
                         variant="outlined"
                         sx={{ flex: 4, marginRight: 1 }} // Takes up 4/5 of the space
+                        aria-label="Search query"
                     />
-                    <Button type="submit" variant="contained" color="primary" sx={{ flex: 1 }}>
+                    <Button type="submit" variant="contained" color="primary" sx={{ flex: 1 }} aria-label="Search">
                         Search
                     </Button>
                 </Box>
             </form>
 
             {/* Filters and Sort Options */}
-            <Grid container spacing={2} justifyContent="space-between">
-                <Grid>
+            <Grid container spacing={2} justifyContent="center">
+                <Grid item>
                     <FormControlLabel
                         control={
                             <Switch
                                 checked={showInCollection}
                                 onChange={(event) => handleFilterChange('showInCollection', event.target.checked)}
+                                aria-label="Show objects already in My Collection"
                             />
                         }
                         label="Show objects already in My Collection"
                     />
                 </Grid>
-                <Grid>
+                <Grid item>
                     <FormControlLabel
                         control={
                             <Switch
                                 checked={showHasImages}
                                 onChange={(event) => handleFilterChange('showHasImages', event.target.checked)}
+                                aria-label="Only show objects with images"
                             />
                         }
                         label="Only show objects with images"
                     />
                 </Grid>
-                <Grid>
+                <Grid item>
                     <FormControl sx={{ minWidth: 120 }}>
                         <FormLabel id="sort-label">Sort by Age</FormLabel>
                         <Select
@@ -92,13 +95,14 @@ const SearchForm = ({
                             value={sortOrder}
                             onChange={handleSortChange}
                             label="Sort by Age"
+                            aria-label="Sort by Age"
                         >
                             <MenuItem value="oldestFirst">Oldest First</MenuItem>
                             <MenuItem value="newestFirst">Newest First</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid>
+                <Grid item>
                     <FormControl sx={{ minWidth: 120 }}>
                         <FormLabel id="results-per-page-label">Max results shown per page</FormLabel>
                         <Select
@@ -107,6 +111,7 @@ const SearchForm = ({
                             value={resultsPerPage}
                             onChange={handleResultsPerPageChange}
                             label="Results per page"
+                            aria-label="Max results per page"
                         >
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={20}>20</MenuItem>

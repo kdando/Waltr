@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLoading } from '../contexts/LoadingContext';
 import quotes from '../public/quotes.json';
-import { CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography, Box } from '@mui/material';
 
 const Loading = () => {
     const [randomQuote, setRandomQuote] = useState('');
@@ -17,12 +17,24 @@ const Loading = () => {
         fetchRandomQuote();
     }, []);
 
+    // Return null if not loading
     if (!isLoading) {
         return null;
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+                textAlign: 'center'
+            }}
+            role="alert"
+            aria-live="polite"
+        >
             <CircularProgress />
             <Typography variant="h4" sx={{ mt: 2 }}>
                 {randomQuote.text}
@@ -30,7 +42,7 @@ const Loading = () => {
             <Typography variant="body1" sx={{ mt: 1 }}>
                 - {randomQuote.author}
             </Typography>
-        </div>
+        </Box>
     );
 };
 

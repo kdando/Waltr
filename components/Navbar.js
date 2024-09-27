@@ -1,29 +1,102 @@
 // components/Navbar.js
 
+import React from 'react';
 import Link from 'next/link';
-import { Button, AppBar, Toolbar, Typography } from '@mui/material';
+import { Button, AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Navbar = () => {
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
     return (
         <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Toolbar sx={{ justifyContent: 'space-between' }}>
+                <Typography variant="h6" component="div" aria-label="Website Name">
                     Waltr
                 </Typography>
-                <Button color="inherit" component={Link} href="/">
-                    Welcome
-                </Button>
-                <Button color="inherit" component={Link} href="/my-collection">
-                    My Collection
-                </Button>
-                <Button color="inherit" component={Link} href="/search">
-                    Search
-                </Button>
-                <Button color="inherit" component={Link} href="/signup">
-                    Sign Up/Log In
-                </Button>
+
+                <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                    <IconButton
+                        size="large"
+                        aria-label="menu"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleOpenNavMenu}
+                        color="inherit"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorElNav}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElNav)}
+                        onClose={handleCloseNavMenu}
+                    >
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Link href="/" passHref>
+                                <Button color="inherit" sx={{ width: '100%' }}>
+                                    Welcome
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Link href="/my-collection" passHref>
+                                <Button color="inherit" sx={{ width: '100%' }}>
+                                    My Collection
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Link href="/search" passHref>
+                                <Button color="inherit" sx={{ width: '100%' }}>
+                                    Search
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Link href="/signup" passHref>
+                                <Button color="inherit" sx={{ width: '100%' }}>
+                                    Sign Up/Log In
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                    </Menu>
+                </Box>
+
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
+                    <Button color="inherit" component={Link} href="/" aria-label="Navigate to Welcome page">
+                        Welcome
+                    </Button>
+                    <Button color="inherit" component={Link} href="/my-collection" aria-label="Navigate to My Collection page">
+                        My Collection
+                    </Button>
+                    <Button color="inherit" component={Link} href="/search" aria-label="Navigate to Search page">
+                        Search
+                    </Button>
+                    <Button color="inherit" component={Link} href="/signup" aria-label="Navigate to Sign Up or Log In page">
+                        Sign Up/Log In
+                    </Button>
+                </Box>
             </Toolbar>
         </AppBar>
     );
 };
+
 export default Navbar;
