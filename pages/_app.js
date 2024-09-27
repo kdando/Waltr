@@ -9,10 +9,9 @@ import Layout from '../components/Layout';
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Normalises the browser default styles */}
+      <CssBaseline />
       <LoadingProvider>
         <CollectionProvider>
-          {/* Wrap the page component with the global Layout */}
           <Layout>
             <Component {...pageProps} />
           </Layout>

@@ -1,13 +1,20 @@
 
 // FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES
 function describePeriod(earliestDate, latestDate) {
+
     const getCenturyDescription = (year) => {
         const century = Math.floor(year / 100) + 1;
         const yearInCentury = year % 100;
         let timePeriod;
-        if (yearInCentury < 30) timePeriod = "Early";
-        else if (yearInCentury < 60) timePeriod = "Mid";
-        else timePeriod = "Late";
+
+        if (yearInCentury < 40) {
+            timePeriod = "Early";
+        } else if (yearInCentury < 60) {
+            timePeriod = "Mid";
+        } else {
+            timePeriod = "Late";
+        }
+
         return `${timePeriod} ${century}${getSuffix(century)} Century`;
     };
 
@@ -32,6 +39,8 @@ function describePeriod(earliestDate, latestDate) {
 
     if (earliestDesc === latestDesc) {
         return earliestDesc;
+    } else if (earliestDesc.split(" ")[1] === latestDesc.split(" ")[1]) {
+        return earliestDesc.split(" ")[1] + " Century";
     } else {
         return `${earliestDesc} to ${latestDesc}`;
     }
