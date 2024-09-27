@@ -6,6 +6,7 @@ import SearchForm from '../components/SearchForm';
 import PaginationControls from '../components/PaginationControls';
 import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
+import { useError } from '../contexts/ErrorContext';
 import Loading from '../components/Loading';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'
@@ -22,6 +23,7 @@ const Search = () => {
     const { collection } = useContext(CollectionContext);
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
+    const { triggerError } = useError();
 
     const handleSearch = async () => {
         if (!searchQuery) return; // Prevent search if query is empty
@@ -40,10 +42,26 @@ const Search = () => {
             });
             setSearchResults(response.data);
         } catch (error) {
-            console.error(error);
+            // Handle the error (response status 4xx or 5xx)
+            console.error('API Error:', error);
+            console.log("WE TRYING TO ACCESS THIS AXIOS BITCH")
+            console.log(error.message)
+            console.log(error.response.status)
+            console.log("don't fear")
+
+
+            // Check if the error has a response from the server
+            if (error.response && error.response.data && error.response.data.message) {
+                // Trigger the error in the ErrorContext
+                triggerError(error.response.data.message);
+            } else {
+                // Trigger a generic error if no response message
+                triggerError('An unexpected error occurred.');
+            }
         } finally {
             setIsLoading(false);
         }
+
     };
 
     const openModal = (object) => {

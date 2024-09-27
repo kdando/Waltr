@@ -51,7 +51,7 @@ async function fetchObjectMet(objectId) {
 
         const data = result.data
 
-        let objectImages = [data.primaryImageSmall]
+        let objectImages = [data.primaryImage, ...data.additionalImages]
 
         //NORMALISING MET RESULT
         const newObject = {
@@ -176,6 +176,9 @@ export default async function handler(req, res) {
         // Combine and filter results
         const allObjects = [...metObjects, ...vnaObjects].filter((obj) => obj !== null);
         res.json(allObjects);
+
+
+        // res.status(500).json({ message: 'Internal Server Error' });
     } catch (error) {
         console.error('Error fetching data from APIs:', error);
         res.status(500).json({ message: 'Internal Server Error' });
