@@ -1,3 +1,5 @@
+// components/CustomModal.js
+
 import React, { useState, useEffect } from 'react';
 import { Modal, Fade, Box, Typography, Button, IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -17,6 +19,19 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
             setImages([]);
         }
     }, [content]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                onRequestClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onRequestClose]);
 
     const handleClose = () => {
         onRequestClose();
@@ -39,6 +54,8 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
             open={isOpen}
             onClose={handleClose}
             closeAfterTransition
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
         >
             <Fade in={isOpen}>
                 <Box
@@ -67,6 +84,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                             top: 8,
                             color: (theme) => theme.palette.grey[500],
                         }}
+                        aria-label="Close modal"
                     >
                         <CloseIcon />
                     </IconButton>
@@ -76,7 +94,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         <Box sx={{ width: '100%', height: 400, mb: 2, position: 'relative' }}>
                             <img
                                 src={images[currentImageIndex]}
-                                alt={content.title}
+                                alt={content.title || 'Artwork image'}
                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                             />
                             {images.length > 1 && (
@@ -84,12 +102,14 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                                     <IconButton
                                         onClick={handlePrevImage}
                                         sx={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)' }}
+                                        aria-label="Previous image"
                                     >
                                         <ArrowBackIosNewIcon />
                                     </IconButton>
                                     <IconButton
                                         onClick={handleNextImage}
                                         sx={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)' }}
+                                        aria-label="Next image"
                                     >
                                         <ArrowForwardIosIcon />
                                     </IconButton>
@@ -126,7 +146,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         </Box>
                     )}
 
-                    {/* Text Content */}
+
                     <Typography variant="h4" id="transition-modal-title" gutterBottom>
                         {content.title}
                     </Typography>
@@ -136,11 +156,8 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         <strong>Culture or Place of Origin:</strong> {content.culture}
                     </Typography>
-                    {/* <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Created:</strong> {content.objectDate}
-                    </Typography> */}
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <Strong>Period:</Strong> {content.period}
+                        <strong>Period:</strong> {content.period}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         {content.briefDescription}
@@ -153,6 +170,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         target="_blank"
                         href={content.objectURL}
                         rel="noopener noreferrer"
+                        aria-label="More details about the artwork"
                     >
                         More Details (External Site)
                     </Button>

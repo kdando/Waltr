@@ -1,3 +1,5 @@
+// components/Error.js
+
 import React from 'react';
 import { Alert, AlertTitle, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,15 +10,19 @@ const Error = () => {
 
     console.log("Current error message:", errorMessage); // FYI
 
+
     // if (!errorMessage) return null;
 
     const handleClose = () => {
         clearError();
-        window.location.reload(); // reloads the page when we close the error alert
+        window.location.reload(); // Reloads the page when we close the error alert
     };
 
     return (
         <Box
+            role="alertdialog"
+            aria-labelledby="error-title"
+            aria-describedby="error-description"
             sx={{
                 position: 'fixed',
                 top: 0,
@@ -27,7 +33,8 @@ const Error = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 1300, // MUI zIndex for modals/dialogs
-                bgcolor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+
+                padding: 2, // Add some padding to the container
             }}
         >
             <Alert
@@ -35,7 +42,7 @@ const Error = () => {
                 variant="filled"
                 action={
                     <IconButton
-                        aria-label="close"
+                        aria-label="close error alert"
                         color="inherit"
                         size="small"
                         onClick={handleClose}
@@ -43,11 +50,15 @@ const Error = () => {
                         <CloseIcon fontSize="inherit" />
                     </IconButton>
                 }
-                sx={{ backgroundColor: 'rgba(255, 0, 0, 0.1)', border: '1px solid red' }}
+                sx={{
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    border: '1px solid red',
+                    width: { xs: '90%', sm: '80%', md: '60%' }, // Responsive width
+                }}
             >
-                <AlertTitle>Something went wrong :(</AlertTitle>
-                {errorMessage}
-                Close this box to reload the page.
+                <AlertTitle id="error-title">Something went wrong :(</AlertTitle>
+                <span id="error-description">{errorMessage}</span>
+                <span> Close this box to reload the page.</span>
             </Alert>
         </Box>
     );

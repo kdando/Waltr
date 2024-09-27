@@ -8,7 +8,7 @@ import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
 import { useError } from '../contexts/ErrorContext';
 import Loading from '../components/Loading';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 
 const Search = () => {
@@ -138,7 +138,7 @@ const Search = () => {
                                 </Grid>
                             ))
                         ) : (
-                            <p>Try searching for something!</p> // Message if no results
+                            <Typography variant="h6" color="textSecondary">Try searching for something!</Typography>
                         )}
                     </Grid>
 
@@ -155,6 +155,8 @@ const Search = () => {
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 content={modalContent}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
             />
         </Box>
     );

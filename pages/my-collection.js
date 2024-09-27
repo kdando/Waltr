@@ -1,13 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { CollectionContext } from '../contexts/CollectionContext';
-
 import ObjectCard from '../components/ObjectCard';
 import { Typography, Box, Modal } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 
 const MyCollection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
+    const [modalContent, setModalContent] = useState({});
     const { collection } = useContext(CollectionContext);
 
     const openModal = (object) => {
@@ -26,10 +25,10 @@ const MyCollection = () => {
                 sx={{
                     minHeight: '100vh',
                     padding: { xs: 2, md: 4 },
-                    textAlign: 'center'
+                    textAlign: 'center',
                 }}
             >
-                <Typography variant="h1" component="h1" gutterBottom>
+                <Typography variant="h1" component="h1" gutterBottom aria-label="My Collection">
                     My Collection
                 </Typography>
 
@@ -45,13 +44,15 @@ const MyCollection = () => {
             <Modal
                 open={isModalOpen}
                 onClose={closeModal}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
                 sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
                 <Box sx={{ bgcolor: 'background.paper', padding: 4, borderRadius: 2 }}>
-                    <Typography variant="h6" component="h2">
+                    <Typography id="modal-title" variant="h6" component="h2">
                         {modalContent.name}
                     </Typography>
-                    <Typography variant="body2" component="p">
+                    <Typography id="modal-description" variant="body2" component="p">
                         {modalContent.description}
                     </Typography>
                 </Box>
