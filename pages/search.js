@@ -24,20 +24,26 @@ const Search = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
     const { triggerError } = useError();
+    const [searchByCultureOrPlace, setSearchByCultureOrPlace] = useState(false);
+    const [fromYear, setFromYear] = useState('');
+    const [toYear, setToYear] = useState('');
 
     const handleSearch = async () => {
-        if (!searchQuery) return; // Prevent search if query is empty
+        if (!searchQuery) return;
 
         setIsLoading(true);
         try {
-            const response = await axios.get(`/api/search`, {
+            const response = await axios.get('/api/search', {
                 params: {
                     searchTerm: searchQuery,
                     showInCollection,
                     showHasImages,
                     sortOrder,
+                    searchByCultureOrPlace,
                     resultsPerPage,
-                    currentPage
+                    currentPage,
+                    fromYear,
+                    toYear
                 }
             });
             setSearchResults(response.data);
@@ -47,13 +53,11 @@ const Search = () => {
             console.log("WE TRYING TO ACCESS THIS AXIOS BITCH")
             console.log(error.message)
             console.log(error.response.status)
-            console.log("don't fear")
-
 
             // Check if the error has a response from the server
-            if (error.response && error.response.data && error.response.data.message) {
+            if (error.message && error.response.status) {
                 // Trigger the error in the ErrorContext
-                triggerError(error.response.data.message);
+                triggerError(error.message);
             } else {
                 // Trigger a generic error if no response message
                 triggerError('An unexpected error occurred.');
@@ -90,17 +94,18 @@ const Search = () => {
         } else if (sortOrder === 'newestFirst') {
             return b.objectBeginDate - a.objectBeginDate;
         }
-        return 0; // Return 0 if sortOrder is not recognized
+        return 0;
     });
 
     return (
         <Box sx={{ py: 4 }}>
-            {/* Search Form */}
             <SearchForm
                 searchQuery={searchQuery}
                 showInCollection={showInCollection}
                 showHasImages={showHasImages}
                 sortOrder={sortOrder}
+                searchByCultureOrPlace={searchByCultureOrPlace}
+                setSearchByCultureOrPlace={setSearchByCultureOrPlace}
                 onSearch={handleSearch}
                 onSearchQueryChange={(query) => setSearchQuery(query)}
                 onFilterChange={(filterType, value) => {
@@ -116,8 +121,16 @@ const Search = () => {
                 setResultsPerPage={setResultsPerPage}
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
+                fromYear={fromYear}
+                toYear={toYear}
+                onYearChange={(type, value) => {
+                    if (type === 'from') {
+                        setFromYear(value);
+                    } else {
+                        setToYear(value);
+                    }
+                }}
             />
-
             {/* Loading Spinner */}
             {isLoading ? (
                 <Loading />
