@@ -1,6 +1,40 @@
 // util/apiHelpers.js
 
-// FUNCTION TO COMPARE TWO DATES HANDLING VARIOUS FORMATS INCLUDING BC
+// FUNCTION TO BUILD MET API URLS FROM SEARCH FORM PARAMS //////////////////////////////////////////////////////////
+function constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, fromYear, toYear) {
+    let url = `${API_URLS.MET}/search?q=${searchTerm}`;
+    if (searchByCultureOrPlace === "true") url += '&artistOrCulture=true';
+    if (showHasImages === 'true') url += '&hasImages=true';
+    if (fromYear !== null && toYear !== null) {
+        url += `&dateBegin=${fromYear}&dateEnd=${toYear}`;
+    }
+    return url;
+}
+
+// FUNCTION TO BUILD V&A API URLS FROM SEARCH FORM PARAMS //////////////////////////////////////////////////////////
+function constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, fromYear, toYear, sortOrder) {
+    let url = `${API_URLS.VNA}/objects/search?q=${searchTerm}`;
+    if (searchByCultureOrPlace === "true") url += `&q_place_name=${searchTerm}`;
+    if (showHasImages === 'true') url += '&images_exist=1';
+    if (fromYear !== null && toYear !== null) {
+        url += `&year_made_from=${fromYear}&year_made_to=${toYear}`;
+    }
+    if (sortOrder === 'oldestFirst') {
+        url += '&order_by=date&order_sort=asc';
+    } else if (sortOrder === 'newestFirst') {
+        url += '&order_by=date&order_sort=desc';
+    }
+    return url;
+}
+
+// FUNCTION TO BUILD IIIF IMAGE URLS FOR V&A OBJECTS //////////////////////////////////////////////////////////
+const IIIF_BASE_URL = "https://framemark.vam.ac.uk/collections/";
+
+function constructIIIFImageURLs(imageIIIFNumbers) {
+    return imageIIIFNumbers.map(imageID => `${IIIF_BASE_URL}${imageID}/full/!200,200/0/default.jpg`);
+}
+
+// FUNCTION TO COMPARE TWO DATES HANDLING VARIOUS FORMATS INCLUDING BC ///////////////////////////////////////
 function compareDates(dateA, dateB) {
     const parsedA = parseDate(dateA);
     const parsedB = parseDate(dateB);
@@ -9,7 +43,7 @@ function compareDates(dateA, dateB) {
     return 0;
 }
 
-// FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR, HANDLING BC
+// FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR, HANDLING BC ////////
 function parseDate(dateString) {
     if (!dateString) return Number.NEGATIVE_INFINITY;
     const bcYearPattern = /\b(\d+)\s*(BC|BCE)\b/i;
@@ -33,14 +67,14 @@ function parseDate(dateString) {
         if (era === 'BC' || era === 'BCE') {
             return -(century - 1) * 100 - 99; // Return the start of the BC century
         } else {
-            return (century - 1) * 100 + 1; // Return the start of the AD/CE century
+            return (century - 1) * 100 + 1; // Return the start of the AD century
         }
     }
 
     return Number.NEGATIVE_INFINITY; // If we can't parse it return the earliest possible
 }
 
-// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES, HANDLING BC
+// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES, HANDLING BC ////////////////////////
 function describePeriod(earliestDate, latestDate) {
     const getCenturyDescription = (year) => {
         const absYear = Math.abs(year);
@@ -86,4 +120,6 @@ function describePeriod(earliestDate, latestDate) {
     }
 }
 
-export { describePeriod, parseDate, compareDates };
+//////////////////////////////////////////////////////////
+
+export { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFImageURLs };
