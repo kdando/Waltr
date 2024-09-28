@@ -127,13 +127,16 @@ export default async function handler(req, res) {
         const metObjectIds = metResponse.data.objectIDs || [];
         const vnaSystemNumbers = vnaResponse.data.records?.map((record) => record.systemNumber) || [];
 
+        // Calculate total number of results
+        const totalResults = metObjectIds.length + vnaResponse.data.info.record_count;
+
         // Calculate start and end indices for Met results
         const metStartIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
-        const metEndIndex = metStartIndex + parsedResultsPerPage;
+        const metEndIndex = Math.min(metStartIndex + parsedResultsPerPage, metObjectIds.length);
 
         // Calculate start and end indices for V&A results
-        const vnaStartIndex = ((parsedCurrentPage - 1) * parsedResultsPerPage) % vnaPageSize;
-        const vnaEndIndex = vnaStartIndex + parsedResultsPerPage;
+        const vnaStartIndex = Math.max(0, (parsedCurrentPage - 1) * parsedResultsPerPage - metObjectIds.length);
+        const vnaEndIndex = Math.min(vnaStartIndex + parsedResultsPerPage, vnaSystemNumbers.length);
 
         // Fetch detailed records
         const metObjects = await Promise.all(metObjectIds.slice(metStartIndex, metEndIndex).map(fetchObjectMet));
@@ -149,8 +152,20 @@ export default async function handler(req, res) {
             });
         }
 
-        // RETURN THE PROCESSED RESULTS
-        res.json(allObjects);
+        // Calculate total pages
+        const totalPages = Math.ceil(totalResults / parsedResultsPerPage);
+
+        // RETURN THE PROCESSED RESULTS WITH PAGINATION INFO
+        res.json({
+            results: allObjects,
+            pagination: {
+                currentPage: parsedCurrentPage,
+                totalPages: totalPages,
+                totalResults: totalResults,
+                resultsPerPage: parsedResultsPerPage
+            }
+        });
+
     } catch (error) {
         console.error('Error fetching data from APIs:', error);
         res.status(500).json({ message: 'Internal Server Error' });

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import ObjectCard from '../components/ObjectCard';
 import CustomModal from '../components/Modal';
@@ -28,7 +28,10 @@ const Search = () => {
     const [fromYear, setFromYear] = useState('');
     const [toYear, setToYear] = useState('');
 
-    const handleSearch = async () => {
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalResults, setTotalResults] = useState(0);
+
+    const handleSearch = async (page = 1) => {
         if (!searchQuery) return;
 
         setIsLoading(true);
@@ -41,31 +44,31 @@ const Search = () => {
                     sortOrder,
                     searchByCultureOrPlace,
                     resultsPerPage,
-                    currentPage,
+                    currentPage: page,
                     fromYear,
                     toYear
                 }
             });
-            setSearchResults(response.data);
+            setSearchResults(response.data.results);
+            setCurrentPage(response.data.pagination.currentPage);
+            setTotalPages(response.data.pagination.totalPages);
+            setTotalResults(response.data.pagination.totalResults);
         } catch (error) {
-            // Handle the error (response status 4xx or 5xx)
             console.error('API Error:', error);
-            console.log("WE TRYING TO ACCESS THIS AXIOS BITCH")
-            console.log(error.message)
-            console.log(error.response.status)
-
-            // Check if the error has a response from the server
-            if (error.message && error.response.status) {
-                // Trigger the error in the ErrorContext
-                triggerError(error.message);
-            } else {
-                // Trigger a generic error if no response message
-                triggerError('An unexpected error occurred.');
-            }
+            triggerError(error.response?.data?.message || 'An unexpected error occurred.');
         } finally {
             setIsLoading(false);
         }
+    };
 
+    useEffect(() => {
+        if (searchQuery) {
+            handleSearch(currentPage);
+        }
+    }, [currentPage, resultsPerPage]);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
     };
 
     const openModal = (object) => {
@@ -106,7 +109,7 @@ const Search = () => {
                 sortOrder={sortOrder}
                 searchByCultureOrPlace={searchByCultureOrPlace}
                 setSearchByCultureOrPlace={setSearchByCultureOrPlace}
-                onSearch={handleSearch}
+                onSearch={() => handleSearch(1)}
                 onSearchQueryChange={(query) => setSearchQuery(query)}
                 onFilterChange={(filterType, value) => {
                     if (filterType === 'showInCollection') {
@@ -139,7 +142,8 @@ const Search = () => {
                     {/* Pagination Controls (Top) */}
                     <PaginationControls
                         currentPage={currentPage}
-                        onPageChange={(page) => setCurrentPage(page)}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
                     />
 
                     {/* Search Results Grid */}
@@ -151,15 +155,23 @@ const Search = () => {
                                 </Grid>
                             ))
                         ) : (
-                            <Typography variant="h6" color="textSecondary">Try searching for something!</Typography>
+                            <Typography variant="h6" color="textSecondary">
+                                {searchQuery ? 'No results found.' : 'Try searching for something!'}
+                            </Typography>
                         )}
                     </Grid>
 
                     {/* Pagination Controls (Bottom) */}
                     <PaginationControls
                         currentPage={currentPage}
-                        onPageChange={(page) => setCurrentPage(page)}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
                     />
+
+                    <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+                        Showing {sortedResults.length} of {totalResults} total results
+                    </Typography>
+
                 </Box>
             )}
 
