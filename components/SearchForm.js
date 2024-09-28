@@ -19,17 +19,15 @@ const SearchForm = ({
     onResultsPerPageChange,
     currentPage,
     onPageChange,
+    fromYear,
+    toYear,
+    onYearChange,
 }) => {
     const [showMoreOptions, setShowMoreOptions] = useState(false);
 
-
-    useEffect(() => {
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage, searchByCultureOrPlace);
-    }, [currentPage, resultsPerPage, searchByCultureOrPlace]);
-
     const handleSearch = (event) => {
         event.preventDefault();
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, searchByCultureOrPlace, resultsPerPage, currentPage, searchByCultureOrPlace);
+        onSearch();
     };
 
     const handleResultsPerPageChange = (event) => {
@@ -41,20 +39,14 @@ const SearchForm = ({
 
     const handleFilterChange = (filterType, value) => {
         onFilterChange(filterType, value);
-        if (filterType === 'showHasImages') {
-            onSearch(searchQuery, showInCollection, value, sortOrder, resultsPerPage, 1, searchByCultureOrPlace);
-        }
     };
 
     const handleSortChange = (event) => {
-        const newSortOrder = event.target.value;
-        onSortChange(newSortOrder);
-        onSearch(searchQuery, showInCollection, showHasImages, newSortOrder, resultsPerPage, 1, searchByCultureOrPlace);
+        onSortChange(event.target.value);
     };
 
     return (
         <Stack spacing={4}>
-            {/* Search Bar and Button */}
             <form onSubmit={handleSearch}>
                 <Box display="flex" justifyContent="center" alignItems="center">
                     <TextField
@@ -71,7 +63,6 @@ const SearchForm = ({
                 </Box>
             </form>
 
-            {/* Filters and Sort Options */}
             <Grid container spacing={2} justifyContent="center">
                 <Grid>
                     <FormControlLabel
@@ -141,7 +132,6 @@ const SearchForm = ({
                 </Grid>
             </Grid>
 
-            {/* Expandable Section for More Search Options */}
             <Box>
                 <Typography variant="h6" component="h2" onClick={() => setShowMoreOptions(!showMoreOptions)} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                     More Search Options
@@ -162,6 +152,28 @@ const SearchForm = ({
                                 }
                                 label="Search for a culture or place of origin"
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box display="flex" alignItems="center" justifyContent="center">
+                                <Typography variant="body1" sx={{ mr: 2 }}>Search for objects from</Typography>
+                                <TextField
+                                    type="number"
+                                    value={fromYear}
+                                    onChange={(e) => onYearChange('from', e.target.value)}
+                                    placeholder="Year"
+                                    inputProps={{ min: -200000, max: new Date().getFullYear() }}
+                                    sx={{ width: 100, mr: 2 }}
+                                />
+                                <Typography variant="body1" sx={{ mr: 2 }}>to</Typography>
+                                <TextField
+                                    type="number"
+                                    value={toYear}
+                                    onChange={(e) => onYearChange('to', e.target.value)}
+                                    placeholder="Year"
+                                    inputProps={{ min: -200000, max: new Date().getFullYear() }}
+                                    sx={{ width: 100 }}
+                                />
+                            </Box>
                         </Grid>
                     </Grid>
                 </Collapse>

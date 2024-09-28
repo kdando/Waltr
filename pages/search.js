@@ -25,13 +25,15 @@ const Search = () => {
     const [resultsPerPage, setResultsPerPage] = useState(10);
     const { triggerError } = useError();
     const [searchByCultureOrPlace, setSearchByCultureOrPlace] = useState(false);
+    const [fromYear, setFromYear] = useState('');
+    const [toYear, setToYear] = useState('');
 
     const handleSearch = async () => {
-        if (!searchQuery) return; // Prevent search if query is empty
+        if (!searchQuery) return;
 
         setIsLoading(true);
         try {
-            const response = await axios.get(`/api/search`, {
+            const response = await axios.get('/api/search', {
                 params: {
                     searchTerm: searchQuery,
                     showInCollection,
@@ -39,7 +41,9 @@ const Search = () => {
                     sortOrder,
                     searchByCultureOrPlace,
                     resultsPerPage,
-                    currentPage
+                    currentPage,
+                    fromYear,
+                    toYear
                 }
             });
             setSearchResults(response.data);
@@ -95,7 +99,6 @@ const Search = () => {
 
     return (
         <Box sx={{ py: 4 }}>
-            {/* Search Form */}
             <SearchForm
                 searchQuery={searchQuery}
                 showInCollection={showInCollection}
@@ -118,8 +121,16 @@ const Search = () => {
                 setResultsPerPage={setResultsPerPage}
                 currentPage={currentPage}
                 onPageChange={(page) => setCurrentPage(page)}
+                fromYear={fromYear}
+                toYear={toYear}
+                onYearChange={(type, value) => {
+                    if (type === 'from') {
+                        setFromYear(value);
+                    } else {
+                        setToYear(value);
+                    }
+                }}
             />
-
             {/* Loading Spinner */}
             {isLoading ? (
                 <Loading />

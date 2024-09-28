@@ -1,52 +1,60 @@
 // util/apiHelpers.js
 
-// FUNCTION TO COMPARE TWO DATES HANDLING VARIOUS FORMATS
+// FUNCTION TO COMPARE TWO DATES HANDLING VARIOUS FORMATS INCLUDING BC
 function compareDates(dateA, dateB) {
     const parsedA = parseDate(dateA);
     const parsedB = parseDate(dateB);
-
     if (parsedA < parsedB) return -1;
     if (parsedA > parsedB) return 1;
     return 0;
 }
 
-//FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR
+// FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR, HANDLING BC
 function parseDate(dateString) {
     if (!dateString) return Number.NEGATIVE_INFINITY;
+    const bcYearPattern = /\b(\d+)\s*(BC|BCE)\b/i;
+    const adYearPattern = /\b(\d+)\s*(AD|CE)?\b/;
+    const centuryPattern = /(\d+)(st|nd|rd|th)\s+century\s*(BC|BCE|AD|CE)?/i;
 
-    const yearPattern = /\b(\d{4})\b/;
-    const centuryPattern = /(\d+)(st|nd|rd|th)\s+century/i;
+    const bcYearMatch = dateString.match(bcYearPattern);
+    if (bcYearMatch) {
+        return -parseInt(bcYearMatch[1], 10);
+    }
 
-    const yearMatch = dateString.match(yearPattern);
-    if (yearMatch) {
-        return parseInt(yearMatch[1], 10);
+    const adYearMatch = dateString.match(adYearPattern);
+    if (adYearMatch) {
+        return parseInt(adYearMatch[1], 10);
     }
 
     const centuryMatch = dateString.match(centuryPattern);
     if (centuryMatch) {
         const century = parseInt(centuryMatch[1], 10);
-        return (century - 1) * 100; // Return the start of the century
+        const era = centuryMatch[3] ? centuryMatch[3].toUpperCase() : 'CE';
+        if (era === 'BC' || era === 'BCE') {
+            return -(century - 1) * 100 - 99; // Return the start of the BC century
+        } else {
+            return (century - 1) * 100 + 1; // Return the start of the AD/CE century
+        }
     }
 
     return Number.NEGATIVE_INFINITY; // If we can't parse it return the earliest possible
 }
 
-// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES
+// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES, HANDLING BC
 function describePeriod(earliestDate, latestDate) {
-
     const getCenturyDescription = (year) => {
-        const century = Math.floor(year / 100) + 1;
-        const yearInCentury = year % 100;
+        const absYear = Math.abs(year);
+        const century = Math.floor((absYear - 1) / 100) + 1;
+        const yearInCentury = absYear % 100;
         let timePeriod;
-
-        if (yearInCentury < 40) {
+        if (yearInCentury <= 33) {
             timePeriod = "Early";
-        } else if (yearInCentury < 60) {
+        } else if (yearInCentury <= 66) {
             timePeriod = "Mid";
         } else {
             timePeriod = "Late";
         }
-
+        const era = year < 0 ? "BC" : "CE";
         return `${timePeriod} ${century}${getSuffix(century)} Century`;
     };
 
@@ -60,26 +68,22 @@ function describePeriod(earliestDate, latestDate) {
     };
 
     if (!earliestDate && !latestDate) return "Unknown period";
-    if (!earliestDate) return `Up to ${getCenturyDescription(new Date(latestDate).getFullYear())}`;
-    if (!latestDate) return `From ${getCenturyDescription(new Date(earliestDate).getFullYear())}`;
+    if (!earliestDate) return `Up to ${getCenturyDescription(parseDate(latestDate))}`;
+    if (!latestDate) return `From ${getCenturyDescription(parseDate(earliestDate))}`;
 
-    const earliestYear = new Date(earliestDate).getFullYear();
-    const latestYear = new Date(latestDate).getFullYear();
-
+    const earliestYear = parseDate(earliestDate);
+    const latestYear = parseDate(latestDate);
     const earliestDesc = getCenturyDescription(earliestYear);
     const latestDesc = getCenturyDescription(latestYear);
 
     if (earliestDesc === latestDesc) {
         return earliestDesc;
-    } else if (earliestDesc.split(" ")[1] === latestDesc.split(" ")[1]) {
-        return earliestDesc.split(" ")[1] + " Century";
+    } else if (earliestDesc.split(" ")[1] === latestDesc.split(" ")[1] &&
+        earliestDesc.split(" ")[4] === latestDesc.split(" ")[4]) {
+        return `${earliestDesc.split(" ")[1]} Century ${earliestDesc.split(" ")[4]}`;
     } else {
         return `${earliestDesc} to ${latestDesc}`;
     }
 }
-///////////////////////////
-
-
-
 
 export { describePeriod, parseDate, compareDates };

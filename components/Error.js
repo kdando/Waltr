@@ -10,7 +10,6 @@ const Error = () => {
 
     console.log("Current error message:", errorMessage); // FYI
 
-
     // if (!errorMessage) return null;
 
     const handleClose = () => {
@@ -32,14 +31,12 @@ const Error = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 1300, // MUI zIndex for modals/dialogs
-
-                padding: 2, // Add some padding to the container
+                zIndex: 1300,
+                padding: 2
             }}
         >
             <Alert
                 severity="error"
-                variant="filled"
                 action={
                     <IconButton
                         aria-label="close error alert"
@@ -53,12 +50,12 @@ const Error = () => {
                 sx={{
                     backgroundColor: 'rgba(255, 0, 0, 0.1)',
                     border: '1px solid red',
-                    width: { xs: '90%', sm: '80%', md: '60%' }, // Responsive width
+                    width: { xs: '90%', sm: '80%', md: '60%' }
                 }}
             >
                 <AlertTitle id="error-title">Something went wrong :(</AlertTitle>
                 <span id="error-description">{errorMessage}</span>
-                <span> Close this box to reload the page.</span>
+                <p> Close this box to reload the page.</p>
             </Alert>
         </Box>
     );
