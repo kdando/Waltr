@@ -1,5 +1,7 @@
 // util/apiHelpers.js
 
+import { API_URLS } from '@/pages/api/search';
+
 // FUNCTION TO BUILD MET API URLS FROM SEARCH FORM PARAMS //////////////////////////////////////////////////////////
 function constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, fromYear, toYear) {
     let url = `${API_URLS.MET}/search?q=${searchTerm}`;
@@ -12,7 +14,7 @@ function constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, f
 }
 
 // FUNCTION TO BUILD V&A API URLS FROM SEARCH FORM PARAMS //////////////////////////////////////////////////////////
-function constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, fromYear, toYear, sortOrder) {
+function constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, fromYear, toYear, sortOrder, pageSize, page) {
     let url = `${API_URLS.VNA}/objects/search?q=${searchTerm}`;
     if (searchByCultureOrPlace === "true") url += `&q_place_name=${searchTerm}`;
     if (showHasImages === 'true') url += '&images_exist=1';
@@ -24,6 +26,7 @@ function constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, f
     } else if (sortOrder === 'newestFirst') {
         url += '&order_by=date&order_sort=desc';
     }
+    url += `&page_size=${pageSize}&page=${page}`;
     return url;
 }
 

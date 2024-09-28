@@ -146,25 +146,57 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         </Box>
                     )}
 
+                    {/* TEXT CONTENT */}
 
                     <Typography variant="h4" id="transition-modal-title" gutterBottom>
                         {content.title}
                     </Typography>
-                    <Typography variant="body1" id="transition-modal-description" gutterBottom>
-                        {content.objectName}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Culture or Place of Origin:</strong> {content.culture}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Period:</strong> {content.period}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {content.briefDescription}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>Repository:</strong> {content.repository}
-                    </Typography>
+
+                    {content.objectName && (
+                        <Typography variant="body1" id="transition-modal-description" gutterBottom>
+                            {content.objectName}
+                        </Typography>
+                    )}
+
+                    {content.culture && (
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                            <strong>Culture or Place of Origin:</strong> {content.culture}
+                        </Typography>
+                    )}
+
+                    {content.period && (
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                            <strong>Period:</strong> {content.period}
+                        </Typography>
+                    )}
+
+                    {content.briefDescription && (
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                            {content.briefDescription}
+                        </Typography>
+                    )}
+
+                    {content.repository && (
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                            <strong>Repository:</strong> {content.repository}
+                        </Typography>
+                    )}
+
+                    {/* NOTE TO USER WHEN RECORD IS SPARSE */}
+                    {[
+                        content.objectName,
+                        content.culture,
+                        content.period,
+                        content.briefDescription,
+                        content.repository,
+                    ].filter((field) => !field).length >= 2 && (
+                            <Typography variant="body2" color="text.secondary" gutterBottom>
+                                Not all information is available through APIs. If this record looks sparse, try the link below
+                                to view the Museum's own page for this object.
+                            </Typography>
+                        )}
+
+                    {/* LINK TO MUSEUM'S OWN PAGE ON THE OBJECT */}
                     <Button
                         size="small"
                         target="_blank"
@@ -174,6 +206,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     >
                         More Details (External Site)
                     </Button>
+
                 </Box>
             </Fade>
         </Modal>

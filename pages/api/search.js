@@ -3,11 +3,13 @@
 import axios from 'axios';
 import { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFImageURLs } from '@/utils/apiHelpers';
 
-// Constants
-const API_URLS = {
+// CONSTANTS
+export const API_URLS = {
     MET: 'https://collectionapi.metmuseum.org/public/collection/v1',
     VNA: 'https://api.vam.ac.uk/v2',
 };
+
+const VNA_MAX_PAGE_SIZE = 100;
 
 //// Functions to normalise API results to expected shape //////////////////////////////////////////////////////
 function normaliseMetObject(data) {
@@ -107,15 +109,16 @@ export default async function handler(req, res) {
     const effectiveFromYear = fromYear ? parseInt(fromYear) : null;
     const effectiveToYear = toYear ? parseInt(toYear) : null;
 
-    // building api urls
+    // Calculate V&A pagination parameters
+    const vnaPageSize = Math.min(parsedResultsPerPage, VNA_MAX_PAGE_SIZE);
+    const vnaPage = Math.floor((parsedCurrentPage - 1) * parsedResultsPerPage / vnaPageSize) + 1;
+
+    // Building API URLs
     const metApiUrl = constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear);
-    const vnaApiUrl = constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear, sortOrder);
+    const vnaApiUrl = constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear, sortOrder, vnaPageSize, vnaPage);
 
-
-    // main querying of apis
     try {
-
-        // get starting results
+        // Fetch initial results
         const [metResponse, vnaResponse] = await Promise.all([
             axios.get(metApiUrl),
             axios.get(vnaApiUrl)
@@ -124,13 +127,17 @@ export default async function handler(req, res) {
         const metObjectIds = metResponse.data.objectIDs || [];
         const vnaSystemNumbers = vnaResponse.data.records?.map((record) => record.systemNumber) || [];
 
-        // Pagination
-        const startIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
-        const endIndex = startIndex + parsedResultsPerPage;
+        // Calculate start and end indices for Met results
+        const metStartIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
+        const metEndIndex = metStartIndex + parsedResultsPerPage;
 
-        // get detailed record for each result
-        const metObjects = await Promise.all(metObjectIds.slice(startIndex, endIndex).map(fetchObjectMet));
-        const vnaObjects = await Promise.all(vnaSystemNumbers.slice(startIndex, endIndex).map(fetchObjectVnA));
+        // Calculate start and end indices for V&A results
+        const vnaStartIndex = ((parsedCurrentPage - 1) * parsedResultsPerPage) % vnaPageSize;
+        const vnaEndIndex = vnaStartIndex + parsedResultsPerPage;
+
+        // Fetch detailed records
+        const metObjects = await Promise.all(metObjectIds.slice(metStartIndex, metEndIndex).map(fetchObjectMet));
+        const vnaObjects = await Promise.all(vnaSystemNumbers.slice(vnaStartIndex, vnaEndIndex).map(fetchObjectVnA));
 
         // Combine, filter, and sort them
         const allObjects = [...metObjects, ...vnaObjects].filter((obj) => obj !== null);
