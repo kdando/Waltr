@@ -35,11 +35,19 @@ const SearchForm = ({
 
     const handleFilterChange = (filterType, value) => {
         onFilterChange(filterType, value);
+        if (filterType === 'showHasImages') {
+            // Launch a new search when showHasImages changes
+            onSearch(searchQuery, showInCollection, value, sortOrder, resultsPerPage, 1);
+        }
     };
 
     const handleSortChange = (event) => {
-        onSortChange(event.target.value);
+        const newSortOrder = event.target.value;
+        onSortChange(newSortOrder);
+        // Launch a new search when sortOrder changes
+        onSearch(searchQuery, showInCollection, showHasImages, newSortOrder, resultsPerPage, 1);
     };
+
 
     return (
         <Stack spacing={4}>
@@ -62,7 +70,7 @@ const SearchForm = ({
 
             {/* Filters and Sort Options */}
             <Grid container spacing={2} justifyContent="center">
-                <Grid item>
+                <Grid>
                     <FormControlLabel
                         control={
                             <Switch
@@ -74,7 +82,7 @@ const SearchForm = ({
                         label="Show objects already in My Collection"
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControlLabel
                         control={
                             <Switch
@@ -86,7 +94,7 @@ const SearchForm = ({
                         label="Only show objects with images"
                     />
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControl sx={{ minWidth: 120 }}>
                         <FormLabel id="sort-label">Sort by Age</FormLabel>
                         <Select
@@ -102,7 +110,7 @@ const SearchForm = ({
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item>
+                <Grid>
                     <FormControl sx={{ minWidth: 120 }}>
                         <FormLabel id="results-per-page-label">Max results shown per page</FormLabel>
                         <Select

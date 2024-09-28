@@ -2,13 +2,13 @@
 
 import axios from 'axios';
 
-import { describePeriod } from '@/utils/apiHelpers';
+import { describePeriod, parseDate, compareDates } from '@/utils/apiHelpers';
 
 /*
 
 WE NORMALISE API RESULTS TO AN OBJECT THE FOLLOWING SHAPE FOR CONSISTENCY.
 This is partly-based on the Met API response, with some changes.
-All frontend logic expects results in this shape, all backend calls must normalise results to it.
+All frontend logic expects results in this shape, so all backend calls must normalise results to it.
 
  const newObject = {
             objectID: <number>
@@ -21,7 +21,7 @@ All frontend logic expects results in this shape, all backend calls must normali
             repository: <where it is, mostly this will reflect which API we called for it>
             objectURL: <a link to the object's page on the relevant museum website>
             primaryImageSmall: <the image we use on search results and collection previews>
-            objectImages: ,an ARRAY of urls for all available images of the object from the API>
+            objectImages: <an ARRAY of urls for all available images of the object from the API>
         };
 
 */
@@ -102,7 +102,6 @@ async function fetchObjectVnA(systemNumber) {
             objectPeriod = describePeriod(data.productionDates[0].date.earliest, data.productionDates[0].date.latest)
         }
 
-
         //NORMALISING V&A RESULT
         const newObject = {
             objectID: systemNumber,
@@ -148,15 +147,23 @@ export default async function handler(req, res) {
 
     // MAIN API QUERYING LOGIC
     try {
-        console.log("HELLO KARL, LOOK HERE PAL");
-        console.log("THIS IS THE QUERY VARIABLE, BEING EMBEDDED IN PINGS TO APIS:");
-        console.log(searchTerm);
-        console.log("GOT IT?");
 
-        // Fetch data from both APIs
+        // Build the Met API URL
+        const metApiUrl = `${MET_API_URL}/search?q=${searchTerm}${showHasImages === 'true' ? '&hasImages=true' : ''}`;
+
+        // Build the V&A API URL
+        let vnaApiUrl = `${VNA_API_URL}/objects/search?q=${searchTerm}${showHasImages === 'true' ? '&images_exist=1' : ''}`;
+
+        // plus sorting parameters for V&A
+        if (sortOrder === 'oldestFirst') {
+            vnaApiUrl += '&order_by=date&order_sort=asc';
+        } else if (sortOrder === 'newestFirst') {
+            vnaApiUrl += '&order_by=date&order_sort=desc';
+        }
+
         const [metResponse, vnaResponse] = await Promise.all([
-            axios.get(`${MET_API_URL}/search?q=${searchTerm}`),
-            axios.get(`${VNA_API_URL}/objects/search?q=${searchTerm}`)
+            axios.get(metApiUrl),
+            axios.get(vnaApiUrl)
         ]);
 
         const metObjectIds = metResponse.data.objectIDs || [];
@@ -175,8 +182,16 @@ export default async function handler(req, res) {
 
         // Combine and filter results
         const allObjects = [...metObjects, ...vnaObjects].filter((obj) => obj !== null);
-        res.json(allObjects);
 
+
+        // Sort combined results
+        if (sortOrder === 'oldestFirst') {
+            allObjects.sort((a, b) => compareDates(a.objectDate, b.objectDate));
+        } else if (sortOrder === 'newestFirst') {
+            allObjects.sort((a, b) => compareDates(b.objectDate, a.objectDate));
+        }
+
+        res.json(allObjects);
 
         // res.status(500).json({ message: 'Internal Server Error' });
     } catch (error) {
