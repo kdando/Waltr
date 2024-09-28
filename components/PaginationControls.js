@@ -1,9 +1,8 @@
 // components/PaginationControls.js
-
 import React from 'react';
 import { Button, Box, Typography } from '@mui/material';
 
-const PaginationControls = ({ currentPage, onPageChange }) => {
+const PaginationControls = ({ currentPage, totalPages, onPageChange }) => {
     const handlePageChange = (page) => {
         onPageChange(page);
     };
@@ -28,11 +27,12 @@ const PaginationControls = ({ currentPage, onPageChange }) => {
             >
                 Previous
             </Button>
-            <Typography variant="body1" aria-live="polite"> {/* aria-live for announcements */}
-                Page {currentPage}
+            <Typography variant="body1" aria-live="polite">
+                Page {currentPage} of {totalPages}
             </Typography>
             <Button
                 onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages}
                 aria-label="Go to next page"
             >
                 Next
