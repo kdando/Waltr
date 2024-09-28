@@ -24,6 +24,7 @@ const Search = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
     const { triggerError } = useError();
+    const [searchByCultureOrPlace, setSearchByCultureOrPlace] = useState(false);
 
     const handleSearch = async () => {
         if (!searchQuery) return; // Prevent search if query is empty
@@ -36,6 +37,7 @@ const Search = () => {
                     showInCollection,
                     showHasImages,
                     sortOrder,
+                    searchByCultureOrPlace,
                     resultsPerPage,
                     currentPage
                 }
@@ -47,13 +49,11 @@ const Search = () => {
             console.log("WE TRYING TO ACCESS THIS AXIOS BITCH")
             console.log(error.message)
             console.log(error.response.status)
-            console.log("don't fear")
-
 
             // Check if the error has a response from the server
-            if (error.response && error.response.data && error.response.data.message) {
+            if (error.message && error.response.status) {
                 // Trigger the error in the ErrorContext
-                triggerError(error.response.data.message);
+                triggerError(error.message);
             } else {
                 // Trigger a generic error if no response message
                 triggerError('An unexpected error occurred.');
@@ -90,7 +90,7 @@ const Search = () => {
         } else if (sortOrder === 'newestFirst') {
             return b.objectBeginDate - a.objectBeginDate;
         }
-        return 0; // Return 0 if sortOrder is not recognized
+        return 0;
     });
 
     return (
@@ -101,6 +101,8 @@ const Search = () => {
                 showInCollection={showInCollection}
                 showHasImages={showHasImages}
                 sortOrder={sortOrder}
+                searchByCultureOrPlace={searchByCultureOrPlace}
+                setSearchByCultureOrPlace={setSearchByCultureOrPlace}
                 onSearch={handleSearch}
                 onSearchQueryChange={(query) => setSearchQuery(query)}
                 onFilterChange={(filterType, value) => {

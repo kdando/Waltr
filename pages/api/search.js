@@ -67,10 +67,8 @@ async function fetchObjectMet(objectId) {
             primaryImageSmall: data.primaryImageSmall || null,
             objectImages: objectImages.length > 0 ? objectImages : null
         };
-        console.log("HERES THE NEW OBJECT FROM MET")
-        console.log(newObject)
-        return newObject;
 
+        return newObject;
 
     } catch (error) {
         console.error(`Error fetching object ID ${objectId} from MET:`, error);
@@ -125,7 +123,12 @@ async function fetchObjectVnA(systemNumber) {
 }
 
 export default async function handler(req, res) {
-    const { searchTerm, showInCollection, showHasImages, sortOrder, resultsPerPage = 10, currentPage = 1 } = req.query;
+    const { searchTerm, showInCollection, showHasImages, sortOrder, searchByCultureOrPlace, resultsPerPage = 10, currentPage = 1 } = req.query;
+
+    console.log("LOOK HERE>>>>>>>>>>>>>>>>>")
+    console.log(searchByCultureOrPlace)
+    console.log(typeof searchByCultureOrPlace)
+
 
     // Validate query parameter
     if (!searchTerm || typeof searchTerm !== 'string') {
@@ -148,11 +151,15 @@ export default async function handler(req, res) {
     // MAIN API QUERYING LOGIC
     try {
 
+        // Determine whether to search by artist or culture for Met, and place for V&A
+        const metSearchParam = searchByCultureOrPlace === "true" ? 'artistOrCulture=true' : '';
+        const vnaSearchParam = searchByCultureOrPlace === "true" ? `q_place_name=${searchTerm}` : '';
+
         // Build the Met API URL
-        const metApiUrl = `${MET_API_URL}/search?q=${searchTerm}${showHasImages === 'true' ? '&hasImages=true' : ''}`;
+        const metApiUrl = `${MET_API_URL}/search?q=${searchTerm}${metSearchParam ? `&${metSearchParam}` : ''}${showHasImages === 'true' ? '&hasImages=true' : ''}`;
 
         // Build the V&A API URL
-        let vnaApiUrl = `${VNA_API_URL}/objects/search?q=${searchTerm}${showHasImages === 'true' ? '&images_exist=1' : ''}`;
+        let vnaApiUrl = `${VNA_API_URL}/objects/search?q=${searchTerm}${vnaSearchParam ? `&${vnaSearchParam}` : ''}${showHasImages === 'true' ? '&images_exist=1' : ''}`;
 
         // plus sorting parameters for V&A
         if (sortOrder === 'oldestFirst') {
@@ -160,6 +167,11 @@ export default async function handler(req, res) {
         } else if (sortOrder === 'newestFirst') {
             vnaApiUrl += '&order_by=date&order_sort=desc';
         }
+
+        console.log("THE MET URL:")
+        console.log(metApiUrl)
+        console.log("THE VNA ONE:")
+        console.log(vnaApiUrl)
 
         const [metResponse, vnaResponse] = await Promise.all([
             axios.get(metApiUrl),

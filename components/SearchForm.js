@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
-import { FormControl, FormLabel, FormControlLabel, Switch, Select, MenuItem, Button, TextField, Stack, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { FormControl, FormLabel, FormControlLabel, Switch, Select, MenuItem, Button, TextField, Stack, Box, Tooltip, Collapse, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const SearchForm = ({
     searchQuery,
     showInCollection,
     showHasImages,
     sortOrder,
+    searchByCultureOrPlace,
+    setSearchByCultureOrPlace,
     onSearch,
     onSearchQueryChange,
     onFilterChange,
@@ -17,13 +20,16 @@ const SearchForm = ({
     currentPage,
     onPageChange,
 }) => {
+    const [showMoreOptions, setShowMoreOptions] = useState(false);
+
+
     useEffect(() => {
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
-    }, [currentPage, resultsPerPage]);
+        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage, searchByCultureOrPlace);
+    }, [currentPage, resultsPerPage, searchByCultureOrPlace]);
 
     const handleSearch = (event) => {
         event.preventDefault();
-        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, resultsPerPage, currentPage);
+        onSearch(searchQuery, showInCollection, showHasImages, sortOrder, searchByCultureOrPlace, resultsPerPage, currentPage, searchByCultureOrPlace);
     };
 
     const handleResultsPerPageChange = (event) => {
@@ -36,18 +42,15 @@ const SearchForm = ({
     const handleFilterChange = (filterType, value) => {
         onFilterChange(filterType, value);
         if (filterType === 'showHasImages') {
-            // Launch a new search when showHasImages changes
-            onSearch(searchQuery, showInCollection, value, sortOrder, resultsPerPage, 1);
+            onSearch(searchQuery, showInCollection, value, sortOrder, resultsPerPage, 1, searchByCultureOrPlace);
         }
     };
 
     const handleSortChange = (event) => {
         const newSortOrder = event.target.value;
         onSortChange(newSortOrder);
-        // Launch a new search when sortOrder changes
-        onSearch(searchQuery, showInCollection, showHasImages, newSortOrder, resultsPerPage, 1);
+        onSearch(searchQuery, showInCollection, showHasImages, newSortOrder, resultsPerPage, 1, searchByCultureOrPlace);
     };
-
 
     return (
         <Stack spacing={4}>
@@ -59,7 +62,7 @@ const SearchForm = ({
                         value={searchQuery}
                         onChange={(event) => onSearchQueryChange(event.target.value)}
                         variant="outlined"
-                        sx={{ flex: 4, marginRight: 1 }} // Takes up 4/5 of the space
+                        sx={{ flex: 4, marginRight: 1 }}
                         aria-label="Search query"
                     />
                     <Button type="submit" variant="contained" color="primary" sx={{ flex: 1 }} aria-label="Search">
@@ -83,16 +86,24 @@ const SearchForm = ({
                     />
                 </Grid>
                 <Grid>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={showHasImages}
-                                onChange={(event) => handleFilterChange('showHasImages', event.target.checked)}
-                                aria-label="Only show objects with images"
-                            />
-                        }
-                        label="Only show objects with images"
-                    />
+                    <Tooltip
+                        title="Due to rights issues, for some objects images may be present but not viewable here. Click through to More Details on the object card to see more."
+                        disableInteractive
+                        enterTouchDelay={0}
+                        leaveTouchDelay={5000}
+                    >
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showHasImages}
+                                    onChange={(event) => handleFilterChange('showHasImages', event.target.checked)}
+                                    aria-label="Only show objects with images"
+                                    aria-describedby="tooltip-images"
+                                />
+                            }
+                            label="Only show objects with images"
+                        />
+                    </Tooltip>
                 </Grid>
                 <Grid>
                     <FormControl sx={{ minWidth: 120 }}>
@@ -129,6 +140,32 @@ const SearchForm = ({
                     </FormControl>
                 </Grid>
             </Grid>
+
+            {/* Expandable Section for More Search Options */}
+            <Box>
+                <Typography variant="h6" component="h2" onClick={() => setShowMoreOptions(!showMoreOptions)} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                    More Search Options
+                    <IconButton aria-label="expand more" size="small">
+                        <ExpandMoreIcon sx={{ transform: showMoreOptions ? 'rotate(180deg)' : 'rotate(0)' }} />
+                    </IconButton>
+                </Typography>
+                <Collapse in={showMoreOptions}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={searchByCultureOrPlace}
+                                        onChange={(event) => setSearchByCultureOrPlace(event.target.checked)}
+                                        aria-label="Search for a culture or place of origin"
+                                    />
+                                }
+                                label="Search for a culture or place of origin"
+                            />
+                        </Grid>
+                    </Grid>
+                </Collapse>
+            </Box>
         </Stack>
     );
 };
