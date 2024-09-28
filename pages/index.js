@@ -1,7 +1,12 @@
+'use client';
+
 import { Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <>
       <Grid
@@ -24,7 +29,7 @@ export default function Home() {
               sx={{ fontSize: { xs: '2.5rem', md: '4rem' } }}
               aria-label="Welcome message"
             >
-              Welcome to Waltr!
+              {session ? `Welcome back to Waltr, ${session.user.name}!` : 'Welcome to Waltr!'}
             </Typography>
             <Typography
               variant="body1"
