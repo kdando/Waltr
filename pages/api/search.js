@@ -10,7 +10,7 @@ const API_URLS = {
 };
 
 //// Functions to normalise API results to expected shape //////////////////////////////////////////////////////
-function normalizeMetObject(data) {
+function normaliseMetObject(data) {
     const objectImages = [data.primaryImage, ...data.additionalImages];
 
     return {
@@ -28,7 +28,7 @@ function normalizeMetObject(data) {
     };
 }
 
-function normalizeVnAObject(data, systemNumber) {
+function normaliseVnAObject(data, systemNumber) {
     const objectImages = data.images.length > 0 ? constructIIIFImageURLs(data.images) : [];
     const objectPeriod = (data.productionDates[0]?.date?.earliest && data.productionDates[0]?.date?.latest)
         ? describePeriod(data.productionDates[0].date.earliest, data.productionDates[0].date.latest)
@@ -54,7 +54,7 @@ async function fetchObjectMet(objectId) {
     try {
         const result = await axios.get(`${API_URLS.MET}/objects/${objectId}`);
         if (result.data.message === 'Not a valid object') return null;
-        return normalizeMetObject(result.data);
+        return normaliseMetObject(result.data);
     } catch (error) {
         console.error(`Error fetching object ID ${objectId} from MET:`, error);
         return null;
@@ -65,7 +65,7 @@ async function fetchObjectVnA(systemNumber) {
     try {
         const response = await axios.get(`${API_URLS.VNA}/museumobject/${systemNumber}`);
         if (response.data.detail === 'Not Found') return null;
-        return normalizeVnAObject(response.data.record, systemNumber);
+        return normaliseVnAObject(response.data.record, systemNumber);
     } catch (error) {
         console.error(`Error fetching data for systemNumber: ${systemNumber} from VnA:`, error);
         throw error;
@@ -128,7 +128,7 @@ export default async function handler(req, res) {
         const startIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
         const endIndex = startIndex + parsedResultsPerPage;
 
-        // getdetailed record for each result
+        // get detailed record for each result
         const metObjects = await Promise.all(metObjectIds.slice(startIndex, endIndex).map(fetchObjectMet));
         const vnaObjects = await Promise.all(vnaSystemNumbers.slice(startIndex, endIndex).map(fetchObjectVnA));
 
