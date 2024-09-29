@@ -7,7 +7,7 @@ export default async function handler(req, res) {
                 `https://api.unsplash.com/photos/random?client_id=${process.env.UNSPLASH_ACCESS_KEY}&query=museum`
             );
             res.status(200).json({
-                imageUrl: response.data.urls.full,
+                imageUrl: response.data.urls.regular,
             });
         } catch (error) {
             console.error('Error fetching image from Unsplash:', error);
