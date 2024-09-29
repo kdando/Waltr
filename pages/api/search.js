@@ -1,7 +1,7 @@
 // pages/api/search.js
 
 import axios from 'axios';
-import { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFImageURLs } from '@/utils/apiHelpers';
+import { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFThumbnailURL, constructIIIFFullResURLs } from '@/utils/apiHelpers';
 
 // CONSTANTS
 export const API_URLS = {
@@ -31,7 +31,17 @@ function normaliseMetObject(data) {
 }
 
 function normaliseVnAObject(data, systemNumber) {
-    const objectImages = data.images.length > 0 ? constructIIIFImageURLs(data.images) : [];
+
+    let primaryImageSmall = "";
+    let objectImages = [];
+
+    // Check if there are images
+    if (data.images.length > 0) {
+        primaryImageSmall = constructIIIFThumbnailURL(data.images[0]);
+        objectImages = constructIIIFFullResURLs(data.images);
+    }
+
+    // const objectImages = data.images.length > 0 ? constructIIIFImageURLs(data.images) : [];
     const objectPeriod = (data.productionDates[0]?.date?.earliest && data.productionDates[0]?.date?.latest)
         ? describePeriod(data.productionDates[0].date.earliest, data.productionDates[0].date.latest)
         : "";
@@ -46,7 +56,7 @@ function normaliseVnAObject(data, systemNumber) {
         briefDescription: data.briefDescription || '',
         repository: 'Victoria and Albert Museum, London',
         objectURL: `https://collections.vam.ac.uk/item/${data.systemNumber}/`,
-        primaryImageSmall: objectImages[0] || null,
+        primaryImageSmall: primaryImageSmall.length > 0 ? primaryImageSmall : null,
         objectImages: objectImages.length > 0 ? objectImages : null
     };
 }
@@ -104,16 +114,11 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'Invalid resultsPerPage parameter' });
     }
 
-    console.log("CURRENT FROMYEAR:")
-    console.log(fromYear)
-    console.log("CURRENT TO YEAR:")
-    console.log(toYear)
 
-    // getting date ranges, defaulting 
-    // getting date ranges, defaulting 
+    // getting date ranges, with defaults if only one of either supplied
     const currentYear = new Date().getFullYear();
-    let effectiveFromYear = fromYear ? parseInt(fromYear) : null;  // Changed to let
-    let effectiveToYear = toYear ? parseInt(toYear) : null;        // Changed to let
+    let effectiveFromYear = fromYear ? parseInt(fromYear) : null;
+    let effectiveToYear = toYear ? parseInt(toYear) : null;
 
     if (effectiveFromYear !== null && effectiveToYear === null) {
         effectiveToYear = currentYear;
@@ -121,21 +126,13 @@ export default async function handler(req, res) {
         effectiveFromYear = -200000;
     }
 
-    console.log("EFFECTIVE YEARS:")
-    console.log(effectiveFromYear, effectiveToYear)
-
-    // Calculate V&A pagination parameters
+    // Calculating V&A pagination parameters
     const vnaPageSize = Math.min(parsedResultsPerPage, VNA_MAX_PAGE_SIZE);
     const vnaPage = Math.floor((parsedCurrentPage - 1) * parsedResultsPerPage / vnaPageSize) + 1;
 
     // Building API URLs
     const metApiUrl = constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear);
     const vnaApiUrl = constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear, sortOrder, vnaPageSize, vnaPage);
-
-    console.log("CURRENT MET URL:")
-    console.log(metApiUrl)
-    console.log("CURRENT VNA URL:")
-    console.log(vnaApiUrl)
 
     try {
         // Fetch initial results
@@ -150,13 +147,17 @@ export default async function handler(req, res) {
         // Calculate total number of results
         const totalResults = metObjectIds.length + vnaResponse.data.info.record_count;
 
+        // Calculate the number of results to fetch from each API
+        const metResultsToFetch = Math.min(parsedResultsPerPage, metObjectIds.length);
+        const vnaResultsToFetch = Math.min(parsedResultsPerPage - metResultsToFetch, vnaSystemNumbers.length);
+
         // Calculate start and end indices for Met results
-        const metStartIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
-        const metEndIndex = Math.min(metStartIndex + parsedResultsPerPage, metObjectIds.length);
+        const metStartIndex = (parsedCurrentPage - 1) * metResultsToFetch;
+        const metEndIndex = metStartIndex + metResultsToFetch;
 
         // Calculate start and end indices for V&A results
-        const vnaStartIndex = Math.max(0, (parsedCurrentPage - 1) * parsedResultsPerPage - metObjectIds.length);
-        const vnaEndIndex = Math.min(vnaStartIndex + parsedResultsPerPage, vnaSystemNumbers.length);
+        const vnaStartIndex = (parsedCurrentPage - 1) * vnaResultsToFetch;
+        const vnaEndIndex = vnaStartIndex + vnaResultsToFetch;
 
         // Fetch detailed records
         const metObjects = await Promise.all(metObjectIds.slice(metStartIndex, metEndIndex).map(fetchObjectMet));

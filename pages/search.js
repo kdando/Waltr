@@ -85,14 +85,14 @@ const Search = () => {
         return true;
     });
 
-    const sortedResults = filteredResults.sort((a, b) => {
-        if (sortOrder === 'oldestFirst') {
-            return a.objectBeginDate - b.objectBeginDate;
-        } else if (sortOrder === 'newestFirst') {
-            return b.objectBeginDate - a.objectBeginDate;
-        }
-        return 0;
-    });
+    // const sortedResults = filteredResults.sort((a, b) => {
+    //     if (sortOrder === 'oldestFirst') {
+    //         return a.objectBeginDate - b.objectBeginDate;
+    //     } else if (sortOrder === 'newestFirst') {
+    //         return b.objectBeginDate - a.objectBeginDate;
+    //     }
+    //     return 0;
+    // });
 
     return (
         <Container maxWidth="lg">
@@ -143,8 +143,8 @@ const Search = () => {
                         />
 
                         <Grid container spacing={3} sx={{ mt: 3 }}>
-                            {sortedResults.length > 0 ? (
-                                sortedResults.map((result, index) => (
+                            {filteredResults.length > 0 ? (
+                                filteredResults.map((result, index) => (
                                     <Grid xs={12} sm={6} md={4} lg={3} key={index}>
                                         <ObjectCard object={result} onImageClick={openModal} />
                                     </Grid>
@@ -163,7 +163,7 @@ const Search = () => {
                         />
 
                         <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-                            Showing {sortedResults.length} of {totalResults} total results
+                            Showing {filteredResults.length} of {totalResults} total results
                         </Typography>
                     </Box>
                 )}

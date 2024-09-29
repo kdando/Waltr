@@ -3,7 +3,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Login from '../components/Login';
 import { Box, Typography, Button } from '@mui/material';
 
-export default function Signup() {
+export default function SignIn() {
     const { data: session } = useSession();
 
     return (

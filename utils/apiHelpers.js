@@ -33,8 +33,14 @@ function constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, f
 // FUNCTION TO BUILD IIIF IMAGE URLS FOR V&A OBJECTS //////////////////////////////////////////////////////////
 const IIIF_BASE_URL = "https://framemark.vam.ac.uk/collections/";
 
-function constructIIIFImageURLs(imageIIIFNumbers) {
-    return imageIIIFNumbers.map(imageID => `${IIIF_BASE_URL}${imageID}/full/!200,200/0/default.jpg`);
+// Get thumbnail of a single image
+function constructIIIFThumbnailURL(singleImage) {
+    return `${IIIF_BASE_URL}${singleImage}/full/!200,200/0/default.jpg`;
+}
+
+// Get an array of full size images for the carousel
+function constructIIIFFullResURLs(arrayOfImages) {
+    return arrayOfImages.map(imageID => `${IIIF_BASE_URL}${imageID}/full/full/0/default.jpg`);
 }
 
 // FUNCTION TO COMPARE TWO DATES HANDLING VARIOUS FORMATS INCLUDING BC ///////////////////////////////////////
@@ -125,4 +131,4 @@ function describePeriod(earliestDate, latestDate) {
 
 //////////////////////////////////////////////////////////
 
-export { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFImageURLs };
+export { describePeriod, parseDate, compareDates, constructMetApiUrl, constructVnAApiUrl, constructIIIFThumbnailURL, constructIIIFFullResURLs };

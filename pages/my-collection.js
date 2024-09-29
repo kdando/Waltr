@@ -4,10 +4,17 @@ import ObjectCard from '../components/ObjectCard';
 import { Typography, Box, Modal } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 
+import { useSession } from 'next-auth/react';
+
+
+
+
 const MyCollection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
     const { collection } = useContext(CollectionContext);
+
+    const { data: session } = useSession();
 
     const openModal = (object) => {
         setModalContent(object);
@@ -25,11 +32,11 @@ const MyCollection = () => {
                 sx={{
                     minHeight: '100vh',
                     padding: { xs: 2, md: 4 },
-                    textAlign: 'center',
+                    textAlign: 'center'
                 }}
             >
                 <Typography variant="h1" component="h1" gutterBottom aria-label="My Collection">
-                    My Collection
+                    {session ? `${session.user.name}'s Collection` : 'My Collection'}
                 </Typography>
 
                 <Grid container spacing={3} justifyContent="center">

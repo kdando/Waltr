@@ -26,12 +26,12 @@ const ObjectCard = ({ object }) => {
                     component="img"
                     height="194"
                     image={object.primaryImageSmall}
-                    alt={object.title || 'Artwork image'} // More descriptive alt text
+                    alt={object.title || 'Artefact image'}
                     onClick={openModal}
                     style={{ cursor: 'pointer' }}
-                    role="button" // Indicates that the image is interactive
-                    tabIndex={0} // Makes the image focusable
-                    onKeyPress={(e) => { // Handle Enter key for keyboard accessibility
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={(e) => {
                         if (e.key === 'Enter') openModal();
                     }}
                 />
@@ -41,14 +41,23 @@ const ObjectCard = ({ object }) => {
                         variant="body2"
                         color="text.secondary"
                         onClick={openModal}
-                        style={{ cursor: 'pointer' }}
-                        role="button" // Indicates that the text is interactive
-                        tabIndex={0} // Makes the text focusable
-                        onKeyPress={(e) => { // Handle Enter key for keyboard accessibility
+                        sx={{
+                            cursor: 'pointer',
+                            fontSize: '18px',
+                            whiteSpace: 'pre-wrap',
+                            textAlign: 'center',
+                            minHeight: '194px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => {
                             if (e.key === 'Enter') openModal();
                         }}
                     >
-                        No image available
+                        No image{"\n"}available
                     </Typography>
                 </CardContent>
             )}
