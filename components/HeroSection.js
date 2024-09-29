@@ -34,6 +34,7 @@ const HeroSection = () => {
                 position: 'relative',
                 height: '80vh',
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#000',
@@ -47,16 +48,15 @@ const HeroSection = () => {
             ) : (
                 <Box
                     sx={{
-                        position: 'absolute',
-                        bottom: '20%',
                         textAlign: 'center',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        padding: '20px',
-                        borderRadius: '8px',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                     }}
                 >
-                    <Typography variant="h2" component="h1" color="white">
-                        Explore the World&apos;s Museums
+                    <Typography variant="h1" component="h1" color="white" sx={{ fontSize: { xs: '4rem', sm: '6rem', md: '8rem' }, fontWeight: 'bold' }}>
+                        Waltr
+                    </Typography>
+                    <Typography variant="h4" component="h2" color="white" sx={{ mt: 2 }}>
+                        The world&apos;s treasures at your fingertips
                     </Typography>
                 </Box>
             )}
