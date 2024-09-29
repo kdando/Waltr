@@ -223,7 +223,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     ].filter((field) => !field).length >= 2 && (
                             <Typography variant="body2" color="text.secondary" gutterBottom>
                                 Not all information is available through APIs. If this record looks sparse, try the link below
-                                to view the Museum's own page for this object.
+                                to view the Museum&apos;s own page for this object.
                             </Typography>
                         )}
 
