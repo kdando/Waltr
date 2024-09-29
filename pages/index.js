@@ -1,5 +1,6 @@
 'use client';
 
+import HeroSection from '@/components/HeroSection';
 import { Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // Grid v2
 import { useSession } from 'next-auth/react';
@@ -9,6 +10,7 @@ export default function Home() {
 
   return (
     <>
+      <HeroSection />
       <Grid
         container
         component="main"

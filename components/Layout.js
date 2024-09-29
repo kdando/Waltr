@@ -18,13 +18,13 @@ const Layout = ({ children }) => {
 
             <Navbar />
 
-            <Container maxWidth="lg">
-                {/* Conditionally render the Error component if there's an error */}
-                {errorMessage && <Error />}
 
-                {/* Main stuff */}
-                {children}
-            </Container>
+            {/* Conditionally render the Error component if there's an error */}
+            {errorMessage && <Error />}
+
+            {/* Main stuff */}
+            {children}
+
         </>
     );
 };

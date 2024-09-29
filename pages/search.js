@@ -8,7 +8,7 @@ import { CollectionContext } from '../contexts/CollectionContext';
 import { useLoading } from '../contexts/LoadingContext';
 import { useError } from '../contexts/ErrorContext';
 import Loading from '../components/Loading';
-import { Box, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 
 const Search = () => {
@@ -101,89 +101,91 @@ const Search = () => {
     });
 
     return (
-        <Box sx={{ py: 4 }}>
-            <SearchForm
-                searchQuery={searchQuery}
-                showInCollection={showInCollection}
-                showHasImages={showHasImages}
-                sortOrder={sortOrder}
-                searchByCultureOrPlace={searchByCultureOrPlace}
-                setSearchByCultureOrPlace={setSearchByCultureOrPlace}
-                onSearch={() => handleSearch(1)}
-                onSearchQueryChange={(query) => setSearchQuery(query)}
-                onFilterChange={(filterType, value) => {
-                    if (filterType === 'showInCollection') {
-                        setShowInCollection(value);
-                    } else if (filterType === 'showHasImages') {
-                        setShowHasImages(value);
-                    }
-                }}
-                onSortChange={(value) => setSortOrder(value)}
-                onResultsPerPageChange={(value) => setResultsPerPage(value)}
-                resultsPerPage={resultsPerPage}
-                setResultsPerPage={setResultsPerPage}
-                currentPage={currentPage}
-                onPageChange={(page) => setCurrentPage(page)}
-                fromYear={fromYear}
-                toYear={toYear}
-                onYearChange={(type, value) => {
-                    if (type === 'from') {
-                        setFromYear(value);
-                    } else {
-                        setToYear(value);
-                    }
-                }}
-            />
-            {/* Loading Spinner */}
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <Box>
-                    {/* Pagination Controls (Top) */}
-                    <PaginationControls
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+        <Container maxWidth="lg">
+            <Box sx={{ py: 4 }}>
+                <SearchForm
+                    searchQuery={searchQuery}
+                    showInCollection={showInCollection}
+                    showHasImages={showHasImages}
+                    sortOrder={sortOrder}
+                    searchByCultureOrPlace={searchByCultureOrPlace}
+                    setSearchByCultureOrPlace={setSearchByCultureOrPlace}
+                    onSearch={() => handleSearch(1)}
+                    onSearchQueryChange={(query) => setSearchQuery(query)}
+                    onFilterChange={(filterType, value) => {
+                        if (filterType === 'showInCollection') {
+                            setShowInCollection(value);
+                        } else if (filterType === 'showHasImages') {
+                            setShowHasImages(value);
+                        }
+                    }}
+                    onSortChange={(value) => setSortOrder(value)}
+                    onResultsPerPageChange={(value) => setResultsPerPage(value)}
+                    resultsPerPage={resultsPerPage}
+                    setResultsPerPage={setResultsPerPage}
+                    currentPage={currentPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                    fromYear={fromYear}
+                    toYear={toYear}
+                    onYearChange={(type, value) => {
+                        if (type === 'from') {
+                            setFromYear(value);
+                        } else {
+                            setToYear(value);
+                        }
+                    }}
+                />
+                {/* Loading Spinner */}
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <Box>
+                        {/* Pagination Controls (Top) */}
+                        <PaginationControls
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
 
-                    {/* Search Results Grid */}
-                    <Grid container spacing={3} sx={{ mt: 3 }}>
-                        {sortedResults.length > 0 ? (
-                            sortedResults.map((result, index) => (
-                                <Grid xs={12} sm={6} md={4} lg={3} key={index}>
-                                    <ObjectCard object={result} onImageClick={openModal} />
-                                </Grid>
-                            ))
-                        ) : (
-                            <Typography variant="h6" color="textSecondary">
-                                {searchQuery ? 'No results found.' : 'Try searching for something!'}
-                            </Typography>
-                        )}
-                    </Grid>
+                        {/* Search Results Grid */}
+                        <Grid container spacing={3} sx={{ mt: 3 }}>
+                            {sortedResults.length > 0 ? (
+                                sortedResults.map((result, index) => (
+                                    <Grid xs={12} sm={6} md={4} lg={3} key={index}>
+                                        <ObjectCard object={result} onImageClick={openModal} />
+                                    </Grid>
+                                ))
+                            ) : (
+                                <Typography variant="h6" color="textSecondary">
+                                    {searchQuery ? 'No results found.' : 'Try searching for something!'}
+                                </Typography>
+                            )}
+                        </Grid>
 
-                    {/* Pagination Controls (Bottom) */}
-                    <PaginationControls
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={handlePageChange}
-                    />
+                        {/* Pagination Controls (Bottom) */}
+                        <PaginationControls
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
 
-                    <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-                        Showing {sortedResults.length} of {totalResults} total results
-                    </Typography>
+                        <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+                            Showing {sortedResults.length} of {totalResults} total results
+                        </Typography>
 
-                </Box>
-            )}
+                    </Box>
+                )}
 
-            {/* Modal */}
-            <CustomModal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                content={modalContent}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-            />
-        </Box>
+                {/* Modal */}
+                <CustomModal
+                    isOpen={isModalOpen}
+                    onRequestClose={closeModal}
+                    content={modalContent}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                />
+            </Box>
+        </Container>
     );
 };
 
