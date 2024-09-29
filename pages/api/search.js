@@ -104,10 +104,25 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'Invalid resultsPerPage parameter' });
     }
 
-    // getting date ranges
+    console.log("CURRENT FROMYEAR:")
+    console.log(fromYear)
+    console.log("CURRENT TO YEAR:")
+    console.log(toYear)
+
+    // getting date ranges, defaulting 
+    // getting date ranges, defaulting 
     const currentYear = new Date().getFullYear();
-    const effectiveFromYear = fromYear ? parseInt(fromYear) : null;
-    const effectiveToYear = toYear ? parseInt(toYear) : null;
+    let effectiveFromYear = fromYear ? parseInt(fromYear) : null;  // Changed to let
+    let effectiveToYear = toYear ? parseInt(toYear) : null;        // Changed to let
+
+    if (effectiveFromYear !== null && effectiveToYear === null) {
+        effectiveToYear = currentYear;
+    } else if (effectiveToYear !== null && effectiveFromYear === null) {
+        effectiveFromYear = -200000;
+    }
+
+    console.log("EFFECTIVE YEARS:")
+    console.log(effectiveFromYear, effectiveToYear)
 
     // Calculate V&A pagination parameters
     const vnaPageSize = Math.min(parsedResultsPerPage, VNA_MAX_PAGE_SIZE);
@@ -116,6 +131,11 @@ export default async function handler(req, res) {
     // Building API URLs
     const metApiUrl = constructMetApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear);
     const vnaApiUrl = constructVnAApiUrl(searchTerm, searchByCultureOrPlace, showHasImages, effectiveFromYear, effectiveToYear, sortOrder, vnaPageSize, vnaPage);
+
+    console.log("CURRENT MET URL:")
+    console.log(metApiUrl)
+    console.log("CURRENT VNA URL:")
+    console.log(vnaApiUrl)
 
     try {
         // Fetch initial results

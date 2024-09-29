@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import ObjectCard from '../components/ObjectCard';
 import CustomModal from '../components/Modal';
@@ -9,13 +9,13 @@ import { useLoading } from '../contexts/LoadingContext';
 import { useError } from '../contexts/ErrorContext';
 import Loading from '../components/Loading';
 import { Box, Container, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid2';
 
 const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const { isLoading, setIsLoading } = useLoading();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState("");
+    const [modalContent, setModalContent] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
     const [showHasImages, setShowHasImages] = useState(false);
@@ -31,7 +31,7 @@ const Search = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
 
-    const handleSearch = async (page = 1) => {
+    const handleSearch = useCallback(async (page = 1) => {
         if (!searchQuery) return;
 
         setIsLoading(true);
@@ -46,8 +46,8 @@ const Search = () => {
                     resultsPerPage,
                     currentPage: page,
                     fromYear,
-                    toYear
-                }
+                    toYear,
+                },
             });
             setSearchResults(response.data.results);
             setCurrentPage(response.data.pagination.currentPage);
@@ -59,16 +59,10 @@ const Search = () => {
         } finally {
             setIsLoading(false);
         }
-    };
-
-    useEffect(() => {
-        if (searchQuery) {
-            handleSearch(currentPage);
-        }
-    }, [currentPage, resultsPerPage]);
+    }, [searchQuery, showInCollection, showHasImages, sortOrder, searchByCultureOrPlace, resultsPerPage, fromYear, toYear, setIsLoading, triggerError]);
 
     const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
+        handleSearch(newPage);
     };
 
     const openModal = (object) => {
@@ -111,7 +105,7 @@ const Search = () => {
                     searchByCultureOrPlace={searchByCultureOrPlace}
                     setSearchByCultureOrPlace={setSearchByCultureOrPlace}
                     onSearch={() => handleSearch(1)}
-                    onSearchQueryChange={(query) => setSearchQuery(query)}
+                    onSearchQueryChange={setSearchQuery}
                     onFilterChange={(filterType, value) => {
                         if (filterType === 'showInCollection') {
                             setShowInCollection(value);
@@ -119,12 +113,15 @@ const Search = () => {
                             setShowHasImages(value);
                         }
                     }}
-                    onSortChange={(value) => setSortOrder(value)}
-                    onResultsPerPageChange={(value) => setResultsPerPage(value)}
+                    onSortChange={setSortOrder}
+                    onResultsPerPageChange={(value) => {
+                        setResultsPerPage(value);
+                        handleSearch(1);
+                    }}
                     resultsPerPage={resultsPerPage}
                     setResultsPerPage={setResultsPerPage}
                     currentPage={currentPage}
-                    onPageChange={(page) => setCurrentPage(page)}
+                    onPageChange={handlePageChange}
                     fromYear={fromYear}
                     toYear={toYear}
                     onYearChange={(type, value) => {
@@ -135,19 +132,16 @@ const Search = () => {
                         }
                     }}
                 />
-                {/* Loading Spinner */}
                 {isLoading ? (
                     <Loading />
                 ) : (
                     <Box>
-                        {/* Pagination Controls (Top) */}
                         <PaginationControls
                             currentPage={currentPage}
                             totalPages={totalPages}
                             onPageChange={handlePageChange}
                         />
 
-                        {/* Search Results Grid */}
                         <Grid container spacing={3} sx={{ mt: 3 }}>
                             {sortedResults.length > 0 ? (
                                 sortedResults.map((result, index) => (
@@ -162,7 +156,6 @@ const Search = () => {
                             )}
                         </Grid>
 
-                        {/* Pagination Controls (Bottom) */}
                         <PaginationControls
                             currentPage={currentPage}
                             totalPages={totalPages}
@@ -172,11 +165,9 @@ const Search = () => {
                         <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
                             Showing {sortedResults.length} of {totalResults} total results
                         </Typography>
-
                     </Box>
                 )}
 
-                {/* Modal */}
                 <CustomModal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}

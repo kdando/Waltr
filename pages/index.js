@@ -39,14 +39,14 @@ export default function Home() {
               sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}
               aria-label="Introduction to the app"
             >
-              Start exploring and curating your own collection of artefacts from the world's museums.
+              Start exploring and curating your own collection of artefacts from the world&apos;s museums.
             </Typography>
             <Typography
               variant="h6"
               sx={{ mt: 2 }}
               aria-label="Quote by Walter Benjamin"
             >
-              "Every passion borders on the chaotic, but the collector's passion borders on the chaos of memories."
+              &quot;Every passion borders on the chaotic, but the collector&apos;s passion borders on the chaos of memories.&quot;
             </Typography>
             <Typography
               variant="body1"
