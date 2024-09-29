@@ -85,14 +85,14 @@ const Search = () => {
         return true;
     });
 
-    const sortedResults = filteredResults.sort((a, b) => {
-        if (sortOrder === 'oldestFirst') {
-            return a.objectBeginDate - b.objectBeginDate;
-        } else if (sortOrder === 'newestFirst') {
-            return b.objectBeginDate - a.objectBeginDate;
-        }
-        return 0;
-    });
+    // const sortedResults = filteredResults.sort((a, b) => {
+    //     if (sortOrder === 'oldestFirst') {
+    //         return a.objectBeginDate - b.objectBeginDate;
+    //     } else if (sortOrder === 'newestFirst') {
+    //         return b.objectBeginDate - a.objectBeginDate;
+    //     }
+    //     return 0;
+    // });
 
     return (
         <Container maxWidth="lg">
