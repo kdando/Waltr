@@ -14,9 +14,13 @@ Explore a vast array of cultural treasures and save your favourites for future r
 - **User Authentication:** Sign in to securely store your collection in a database.
 - **Persistent Storage:** Your collection will persist across visits.
 
+## Live Version
+
+A hosted version of Waltr is available to try here: [https://waltr.vercel.app/]
+
 ## Installation
 
-To get started with Waltr, follow these steps:
+To run Waltr yourself on your own machine, follow these steps.
 
 1. Clone the repository:
    ```bash
@@ -35,19 +39,7 @@ To get started with Waltr, follow these steps:
 
 4. Start the application:
    ```bash
-   npm start
+   npm run dev
    ```
-
-## Usage
-
-1. Sign in or create a new account.
-2. Use the search functionality to explore museum APIs.
-3. Save artifacts to your personal collection.
-4. Access your collection anytime by signing into your account.
-
-## Acknowledgments
-
-- Inspired by the idea of collecting memories and experiences through art and history.
-- Thanks to all the museums and APIs for providing access to their collections.
 
 ---
