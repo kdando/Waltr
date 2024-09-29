@@ -71,9 +71,9 @@ const Navbar = () => {
                             </Link>
                         </MenuItem>
                         <MenuItem onClick={handleCloseNavMenu}>
-                            <Link href="/signup" passHref>
+                            <Link href="/sign-in" passHref>
                                 <Button color="inherit" sx={{ width: '100%' }}>
-                                    Sign Up/Log In
+                                    Sign In
                                 </Button>
                             </Link>
                         </MenuItem>
@@ -90,8 +90,8 @@ const Navbar = () => {
                     <Button color="inherit" component={Link} href="/search" aria-label="Navigate to Search page">
                         Search
                     </Button>
-                    <Button color="inherit" component={Link} href="/signup" aria-label="Navigate to Sign Up or Log In page">
-                        Sign Up/Log In
+                    <Button color="inherit" component={Link} href="/sign-in" aria-label="Navigate to Sign In page">
+                        Sign In
                     </Button>
                 </Box>
             </Toolbar>
