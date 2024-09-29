@@ -48,7 +48,7 @@ const Error = () => {
                     </IconButton>
                 }
                 sx={{
-                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    backgroundColor: 'red',
                     border: '1px solid red',
                     width: { xs: '90%', sm: '80%', md: '60%' }
                 }}
