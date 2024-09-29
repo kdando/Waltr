@@ -141,7 +141,7 @@ const SearchForm = ({
                 </Typography>
                 <Collapse in={showMoreOptions}>
                     <Grid container spacing={2} justifyContent="center">
-                        <Grid item>
+                        <Grid>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -153,7 +153,7 @@ const SearchForm = ({
                                 label="Search for a culture or place of origin"
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid xs={12}>
                             <Box display="flex" alignItems="center" justifyContent="center">
                                 <Typography variant="body1" sx={{ mr: 2 }}>Search for objects from</Typography>
                                 <TextField

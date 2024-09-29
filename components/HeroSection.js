@@ -56,7 +56,7 @@ const HeroSection = () => {
                     }}
                 >
                     <Typography variant="h2" component="h1" color="white">
-                        Explore the World's Museums
+                        Explore the World&apos;s Museums
                     </Typography>
                 </Box>
             )}

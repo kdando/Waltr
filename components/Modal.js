@@ -1,7 +1,8 @@
-// components/CustomModal.js
+// components/Modal.js
 
 import React, { useState, useEffect } from 'react';
-import { Modal, Fade, Box, Typography, Button, IconButton } from '@mui/material';
+import Image from 'next/image';
+import { Modal, Fade, Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 const CustomModal = ({ isOpen, onRequestClose, content }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [images, setImages] = useState([]);
+    const [loadingImages, setLoadingImages] = useState(true);
 
     useEffect(() => {
         if (content.objectImages && content.objectImages.length > 0) {
@@ -18,6 +20,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
         } else {
             setImages([]);
         }
+        setLoadingImages(true);
     }, [content]);
 
     useEffect(() => {
@@ -41,12 +44,18 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex > 0 ? prevIndex - 1 : images.length - 1
         );
+        setLoadingImages(true);
     };
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex < images.length - 1 ? prevIndex + 1 : 0
         );
+        setLoadingImages(true);
+    };
+
+    const handleImageLoad = () => {
+        setLoadingImages(false);
     };
 
     return (
@@ -75,7 +84,6 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         overflow: 'auto',
                     }}
                 >
-                    {/* Close Button */}
                     <IconButton
                         onClick={handleClose}
                         sx={{
@@ -89,13 +97,35 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         <CloseIcon />
                     </IconButton>
 
-                    {/* Image being viewed */}
                     {images.length > 0 && (
                         <Box sx={{ width: '100%', height: 400, mb: 2, position: 'relative' }}>
-                            <img
+                            {loadingImages && (
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        zIndex: 1,
+                                    }}
+                                >
+                                    <CircularProgress />
+                                    <Typography variant="body2" sx={{ mt: 2 }}>
+                                        Loading image...
+                                    </Typography>
+                                </Box>
+                            )}
+                            <Image
                                 src={images[currentImageIndex]}
                                 alt={content.title || 'Artwork image'}
-                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                layout="fill"
+                                objectFit="contain"
+                                onLoadingComplete={handleImageLoad}
                             />
                             {images.length > 1 && (
                                 <>
@@ -118,14 +148,16 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         </Box>
                     )}
 
-                    {/* Image Carousel */}
                     {images.length > 1 && (
                         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2, overflow: 'hidden' }}>
                             <Box sx={{ display: 'flex', overflowX: 'auto', maxWidth: '100%' }}>
                                 {images.map((image, index) => (
                                     <Box
                                         key={index}
-                                        onClick={() => setCurrentImageIndex(index)}
+                                        onClick={() => {
+                                            setCurrentImageIndex(index);
+                                            setLoadingImages(true);
+                                        }}
                                         sx={{
                                             width: 80,
                                             height: 80,
@@ -133,20 +165,20 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                                             mx: 0.5,
                                             cursor: 'pointer',
                                             border: currentImageIndex === index ? '2px solid blue' : 'none',
+                                            position: 'relative',
                                         }}
                                     >
-                                        <img
+                                        <Image
                                             src={image}
                                             alt={`Thumbnail ${index + 1}`}
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            layout="fill"
+                                            objectFit="cover"
                                         />
                                     </Box>
                                 ))}
                             </Box>
                         </Box>
                     )}
-
-                    {/* TEXT CONTENT */}
 
                     <Typography variant="h4" id="transition-modal-title" gutterBottom>
                         {content.title}
@@ -182,7 +214,6 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         </Typography>
                     )}
 
-                    {/* NOTE TO USER WHEN RECORD IS SPARSE */}
                     {[
                         content.objectName,
                         content.culture,
@@ -196,7 +227,6 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                             </Typography>
                         )}
 
-                    {/* LINK TO MUSEUM'S OWN PAGE ON THE OBJECT */}
                     <Button
                         size="small"
                         target="_blank"
@@ -206,7 +236,6 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     >
                         More Details (External Site)
                     </Button>
-
                 </Box>
             </Fade>
         </Modal>
