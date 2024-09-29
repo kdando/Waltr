@@ -126,10 +126,7 @@ export default async function handler(req, res) {
         effectiveFromYear = -200000;
     }
 
-    console.log("EFFECTIVE YEARS:")
-    console.log(effectiveFromYear, effectiveToYear)
-
-    // Calculate V&A pagination parameters
+    // Calculating V&A pagination parameters
     const vnaPageSize = Math.min(parsedResultsPerPage, VNA_MAX_PAGE_SIZE);
     const vnaPage = Math.floor((parsedCurrentPage - 1) * parsedResultsPerPage / vnaPageSize) + 1;
 
@@ -150,13 +147,17 @@ export default async function handler(req, res) {
         // Calculate total number of results
         const totalResults = metObjectIds.length + vnaResponse.data.info.record_count;
 
+        // Calculate the number of results to fetch from each API
+        const metResultsToFetch = Math.min(parsedResultsPerPage, metObjectIds.length);
+        const vnaResultsToFetch = Math.min(parsedResultsPerPage - metResultsToFetch, vnaSystemNumbers.length);
+
         // Calculate start and end indices for Met results
-        const metStartIndex = (parsedCurrentPage - 1) * parsedResultsPerPage;
-        const metEndIndex = Math.min(metStartIndex + parsedResultsPerPage, metObjectIds.length);
+        const metStartIndex = (parsedCurrentPage - 1) * metResultsToFetch;
+        const metEndIndex = metStartIndex + metResultsToFetch;
 
         // Calculate start and end indices for V&A results
-        const vnaStartIndex = Math.max(0, (parsedCurrentPage - 1) * parsedResultsPerPage - metObjectIds.length);
-        const vnaEndIndex = Math.min(vnaStartIndex + parsedResultsPerPage, vnaSystemNumbers.length);
+        const vnaStartIndex = (parsedCurrentPage - 1) * vnaResultsToFetch;
+        const vnaEndIndex = vnaStartIndex + vnaResultsToFetch;
 
         // Fetch detailed records
         const metObjects = await Promise.all(metObjectIds.slice(metStartIndex, metEndIndex).map(fetchObjectMet));
