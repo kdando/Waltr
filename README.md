@@ -20,12 +20,12 @@ A hosted version of Waltr is available to try at [https://waltr.vercel.app/](htt
 
 ## Tech and Packages
 
-- This app is built with NextJS, which is a React-based framework.
-- Axios for API calls.
-- Material UI for styling and design.
-- Firebase Auth (via Next-Auth) to handle user authentication.
-- Firestore for persistent storage of user's collections. 
-- DOMPurify for sanitising text content and rendering HTML in object records correctly.
+- This app is built with [https://nextjs.org/](NextJS), which is a [https://react.dev/](React)-based framework.
+- [https://axios-http.com/docs/intro](Axios) for API calls.
+- [https://mui.com/material-ui/getting-started/](Material-UI) for styling and design.
+- [https://firebase.google.com/docs/auth](Firebase) (via [https://next-auth.js.org/getting-started/introduction](NextAuth)) to handle user authentication.
+- [https://firebase.google.com/docs/firestore](Firestore) for persistent storage of user's collections. 
+- [https://www.npmjs.com/package/dompurify](DOMPurify) for sanitising text content and rendering HTML in object records correctly.
 
 If you are running this project locally, running `npm install` will install all the necessary packages, but the authentication system requires additional set-up. See the steps below for more details.
 
