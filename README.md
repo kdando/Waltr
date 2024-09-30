@@ -74,17 +74,17 @@ To run Waltr yourself on your own machine, follow these steps.
    UNSPLASH_SECRET_KEY
    ```
 
-We had GOOGLE_APPLICATION_CREDENTIALS point to another file, `./service-account.json`, so you may want to create that too at the root of your project.
+   We had GOOGLE_APPLICATION_CREDENTIALS point to another file, `./service-account.json`, so you may want to create that too at the root of your project.
 
-For detailed instructions of what these variables should be and how to get set up see the official documentation:
-[NextAuth](https://next-auth.js.org/getting-started/introduction)
-[Firebase](https://firebase.google.com/docs/auth/web/start)
-[Firestore](https://firebase.google.com/docs/firestore/quickstart)
-[UnsplashAPI](https://unsplash.com/documentation)
+   For detailed instructions of what these variables should be and how to get set up see the official documentation:
+   - [NextAuth](https://next-auth.js.org/getting-started/introduction)
+   - [Firebase](https://firebase.google.com/docs/auth/web/start)
+   - [Firestore](https://firebase.google.com/docs/firestore/quickstart)
+   - [UnsplashAPI](https://unsplash.com/documentation)
 
-For a short but clear walkthrough of setting up NextJS for authentication and persistence, see the following videos. Aside from some small details these are reflective of the design of this project:
-[Part 1: Authentication](https://www.youtube.com/watch?v=zrjybW3UKr8)
-[Part 2: Persistent Storage](https://www.youtube.com/watch?v=vUm-YIEbl7E)
+   For a short but clear walkthrough of setting up NextJS for authentication and persistence, see the following videos. Aside from some small details these are reflective of the design of this project:
+   - [Part 1: Authentication](https://www.youtube.com/watch?v=zrjybW3UKr8)
+   - [Part 2: Persistent Storage](https://www.youtube.com/watch?v=vUm-YIEbl7E)
 
 6. When everything is installed and configured correctly, you can run the project locally:
    ```bash
