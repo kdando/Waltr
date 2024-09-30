@@ -1,3 +1,5 @@
+// pages/api/home-image-search.js
+
 import axios from 'axios';
 
 export default async function handler(req, res) {
@@ -13,7 +15,7 @@ export default async function handler(req, res) {
         });
     } catch (error) {
         console.error('Error fetching images from Unsplash:', error);
-        res.status(500).json({ error: 'Error fetching images from Unsplash.' });
+        res.status(500).json({ message: 'Error fetching images from Unsplash.' });
     }
 
 }

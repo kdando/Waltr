@@ -1,3 +1,5 @@
+// pages/search.js
+
 import React, { useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import ObjectCard from '../components/ObjectCard';
@@ -14,23 +16,23 @@ import Grid from '@mui/material/Grid2';
 
 const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
-    const { isLoading, setIsLoading } = useLoading();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [showInCollection, setShowInCollection] = useState(true);
     const [showHasImages, setShowHasImages] = useState(false);
     const [sortOrder, setSortOrder] = useState('oldestFirst');
-    const { collection } = useContext(CollectionContext);
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
-    const { triggerError } = useError();
     const [searchByCultureOrPlace, setSearchByCultureOrPlace] = useState(false);
     const [fromYear, setFromYear] = useState('');
     const [toYear, setToYear] = useState('');
-
     const [totalPages, setTotalPages] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
+
+    const { collection } = useContext(CollectionContext);
+    const { triggerError } = useError();
+    const { isLoading, setIsLoading } = useLoading();
 
     const handleSearch = useCallback(async (page = 1) => {
         if (!searchQuery) return;
@@ -85,15 +87,6 @@ const Search = () => {
         }
         return true;
     });
-
-    // const sortedResults = filteredResults.sort((a, b) => {
-    //     if (sortOrder === 'oldestFirst') {
-    //         return a.objectBeginDate - b.objectBeginDate;
-    //     } else if (sortOrder === 'newestFirst') {
-    //         return b.objectBeginDate - a.objectBeginDate;
-    //     }
-    //     return 0;
-    // });
 
     return (
         <Container maxWidth="lg">

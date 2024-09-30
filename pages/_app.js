@@ -1,4 +1,5 @@
 // pages/_app.js
+
 import { SessionProvider } from 'next-auth/react';
 import { LoadingProvider } from '@/contexts/LoadingContext';
 import { ErrorProvider } from '@/contexts/ErrorContext';

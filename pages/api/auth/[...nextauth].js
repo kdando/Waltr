@@ -1,3 +1,5 @@
+// pages/api/auth/[...nextauth].js
+
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
 import NextAuth from "next-auth"

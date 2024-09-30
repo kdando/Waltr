@@ -52,7 +52,7 @@ function compareDates(dateA, dateB) {
     return 0;
 }
 
-// FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR, HANDLING BC ////////
+// FUNCTION TO PARSE USEABLE DATE FROM A STRING AND GIVE US THE EARLIEST POSSIBLE YEAR ////////
 function parseDate(dateString) {
     if (!dateString) return Number.NEGATIVE_INFINITY;
     const bcYearPattern = /\b(\d+)\s*(BC|BCE)\b/i;
@@ -74,16 +74,15 @@ function parseDate(dateString) {
         const century = parseInt(centuryMatch[1], 10);
         const era = centuryMatch[3] ? centuryMatch[3].toUpperCase() : 'CE';
         if (era === 'BC' || era === 'BCE') {
-            return -(century - 1) * 100 - 99; // Return the start of the BC century
+            return -(century - 1) * 100 - 99;
         } else {
-            return (century - 1) * 100 + 1; // Return the start of the AD century
+            return (century - 1) * 100 + 1;
         }
     }
-
     return Number.NEGATIVE_INFINITY; // If we can't parse it return the earliest possible
 }
 
-// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES, HANDLING BC ////////////////////////
+// FUNCTION TO GENERATE STRING DESCRIBING PERIOD BASED ON TWO DATES ////////////////////////
 function describePeriod(earliestDate, latestDate) {
     const getCenturyDescription = (year) => {
         const absYear = Math.abs(year);

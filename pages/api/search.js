@@ -35,13 +35,13 @@ function normaliseVnAObject(data, systemNumber) {
     let primaryImageSmall = "";
     let objectImages = [];
 
-    // Check if there are images
+    // if there image(s) present create IIIF urls for them
     if (data.images.length > 0) {
         primaryImageSmall = constructIIIFThumbnailURL(data.images[0]);
         objectImages = constructIIIFFullResURLs(data.images);
     }
 
-    // const objectImages = data.images.length > 0 ? constructIIIFImageURLs(data.images) : [];
+    // create a string for period from the production dates
     const objectPeriod = (data.productionDates[0]?.date?.earliest && data.productionDates[0]?.date?.latest)
         ? describePeriod(data.productionDates[0].date.earliest, data.productionDates[0].date.latest)
         : "";
@@ -69,7 +69,7 @@ async function fetchObjectMet(objectId) {
         return normaliseMetObject(result.data);
     } catch (error) {
         console.error(`Error fetching object ID ${objectId} from MET:`, error);
-        return null;
+        return res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
@@ -80,7 +80,7 @@ async function fetchObjectVnA(systemNumber) {
         return normaliseVnAObject(response.data.record, systemNumber);
     } catch (error) {
         console.error(`Error fetching data for systemNumber: ${systemNumber} from VnA:`, error);
-        throw error;
+        return res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
         toYear
     } = req.query;
 
-    // Input validation
+    // parameter validation
     if (!searchTerm || typeof searchTerm !== 'string') {
         return res.status(400).json({ message: 'Invalid query parameter' });
     }

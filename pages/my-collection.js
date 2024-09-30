@@ -1,13 +1,11 @@
+// pages/my-collection.js
+
 import React, { useState, useContext } from 'react';
 import { CollectionContext } from '../contexts/CollectionContext';
 import ObjectCard from '../components/ObjectCard';
 import { Typography, Box, Modal } from '@mui/material';
-import Grid from '@mui/material/Grid2'; // Grid v2
-
+import Grid from '@mui/material/Grid2';
 import { useSession } from 'next-auth/react';
-
-
-
 
 const MyCollection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
