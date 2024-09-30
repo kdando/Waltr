@@ -7,11 +7,15 @@ const Notification = ({ open, onClose, message, severity = "info" }) => {
     return (
         <Snackbar
             open={open}
-            autoHideDuration={2000}  // Disappears after 2 second (duration is given in ms)
+            autoHideDuration={3000}  // Disappears after 3 seconds (duration is given in ms)
             onClose={onClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            aria-live="assertive"
         >
-            <Alert onClose={onClose} severity={severity} sx={{ width: '100%' }}>
+            <Alert onClose={onClose}
+                severity={severity}
+                sx={{ width: '100%' }}
+                role="alert">
                 {message}
             </Alert>
         </Snackbar>
