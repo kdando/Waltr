@@ -18,16 +18,25 @@ Explore a vast array of cultural treasures and save your favourites for future r
 
 A hosted version of Waltr is available to try at [https://waltr.vercel.app/](https://waltr.vercel.app/)
 
+## Museums
+
+The app currently queries two museum APIs:
+- [Metropolitan Museum of Art, New York](https://metmuseum.github.io/)
+- [Victoria and Albert Museum, London](https://developers.vam.ac.uk/guide/v2/welcome.html)
+
+Each API offers slightly different functionality and, even where the functionality is the same, may phrase its parameters differently. Waltr is intended to be extendable, but integrating a new API will require careful consideration of the current backend logic. Check the files `./utils/apiHelpers.js` and `./pages/api/search.js` in particular to see how the app currently combines querying the two different APIs if you wish to add more.
+
 ## Tech and Packages
 
 - This app is built with [NextJS](https://nextjs.org/), which is a [React](https://react.dev/)-based framework.
 - [Axios](https://axios-http.com/docs/intro) for API calls.
 - [Material-UI](https://mui.com/material-ui/getting-started/) for styling and design.
 - [Firebase](https://firebase.google.com/docs/auth) (via [NextAuth](https://next-auth.js.org/getting-started/introduction)) to handle user authentication.
-- [Firestore](https://firebase.google.com/docs/firestore) for persistent storage of user's collections. 
+- [Firestore](https://firebase.google.com/docs/firestore) for persistent storage of user's collections.
+- [Unsplash API](https://unsplash.com/developers) for background images.
 - [DOMPurify](https://www.npmjs.com/package/dompurify) for sanitising text content and rendering HTML in object records correctly.
 
-If you are running this project locally, running `npm install` will install all the necessary packages, but the authentication system requires additional set-up. See the steps below for more details.
+If you are running this project locally, running `npm install` will install all the necessary packages, but the authentication system requires additional set-up. All the services used can be used for free but you will need to sign-up for Unsplash and Firebase/store. See the steps below for more details.
 
 ## Installation
 
@@ -35,7 +44,7 @@ To run Waltr yourself on your own machine, follow these steps.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/waltr.git
+   git clone https://github.com/kdando/Waltr.git
    ```
 
 2. Navigate into the project directory:
