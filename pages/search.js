@@ -11,6 +11,7 @@ import Loading from '../components/Loading';
 import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+
 const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const { isLoading, setIsLoading } = useLoading();
