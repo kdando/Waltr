@@ -26,7 +26,7 @@ const FeatureBox = ({ text }) => {
                 }}
             >
                 <Typography variant="h5" component="h3">
-                    <Box component="span" sx={{ color: theme.palette.primary.main, fontStyle: 'italic', fontWeight: 'bold', fontSize: '1.2em', fontFamily: theme.typography.h5.fontFamily }}>
+                    <Box component="span" sx={{ color: theme.palette.primary.main, fontStyle: 'italic', fontWeight: 'bold', fontSize: '1.5em', fontFamily: theme.typography.h5.fontFamily }}>
                         {firstWord}
                     </Box>
                     <Box component="span" sx={{ fontFamily: theme.typography.fontFamily }}>

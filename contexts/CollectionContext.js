@@ -4,12 +4,14 @@ import { createContext, useState, useEffect } from 'react';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
 import { app } from '../firebase';
+import { useError } from '../contexts/ErrorContext';
 
 export const CollectionContext = createContext();
 
 export const CollectionProvider = ({ children }) => {
 
-    const { data: session } = useSession();  // Get current session
+    const { triggerError, clearError } = useError();
+    const { data: session } = useSession();
     const [collection, setCollection] = useState([]);
     const db = getFirestore(app);
 
@@ -23,7 +25,6 @@ export const CollectionProvider = ({ children }) => {
                     setCollection(docSnap.data().collection || []);
                 }
             };
-
             fetchCollection();
         }
     }, [session]);
@@ -51,6 +52,7 @@ export const CollectionProvider = ({ children }) => {
                 await setDoc(docRef, { collection: newCollection });
             } catch (error) {
                 console.error("Error saving collection: ", error);
+                triggerError('Failed to save collection to Firestore DB.');
             }
         }
     };

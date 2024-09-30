@@ -8,11 +8,9 @@ import { useError } from '@/contexts/ErrorContext';
 const Error = () => {
     const { errorMessage, clearError } = useError();
 
-    if (!errorMessage) return null;
-
     const handleClose = () => {
         clearError();
-        window.location.reload(); // Reloads the page when we close the error alert
+        window.location.reload();
     };
 
     return (
@@ -53,7 +51,7 @@ const Error = () => {
             >
                 <AlertTitle id="error-title">Something went wrong :(</AlertTitle>
                 <Typography variant="body2" id="error-description" gutterBottom>
-                    {errorMessage}
+                    {errorMessage ? errorMessage : "An unknown error occurred."}
                 </Typography>
                 <Typography variant="body2">
                     Close this box to reload the page.

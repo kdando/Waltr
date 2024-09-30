@@ -185,7 +185,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         variant="h4"
                         id="transition-modal-title"
                         gutterBottom
-                        dangerouslySetInnerHTML={renderHTML(content.title)}  // Safely render any HTML in the title
+                        dangerouslySetInnerHTML={renderHTML(content.title)}
                     />
 
                     {content.objectName && (
@@ -211,7 +211,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                             variant="body2"
                             color="text.secondary"
                             gutterBottom
-                            dangerouslySetInnerHTML={renderHTML(content.briefDescription)}  // safely render any html in the description
+                            dangerouslySetInnerHTML={renderHTML(content.briefDescription)}
                         />
                     )}
 
