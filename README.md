@@ -20,15 +20,14 @@ A hosted version of Waltr is available to try at [https://waltr.vercel.app/](htt
 
 ## Tech and Packages
 
-- This app is built with [https://nextjs.org/](NextJS), which is a [https://react.dev/](React)-based framework.
-- [https://axios-http.com/docs/intro](Axios) for API calls.
-- [https://mui.com/material-ui/getting-started/](Material-UI) for styling and design.
-- [https://firebase.google.com/docs/auth](Firebase) (via [https://next-auth.js.org/getting-started/introduction](NextAuth)) to handle user authentication.
-- [https://firebase.google.com/docs/firestore](Firestore) for persistent storage of user's collections. 
-- [https://www.npmjs.com/package/dompurify](DOMPurify) for sanitising text content and rendering HTML in object records correctly.
+- This app is built with [NextJS](https://nextjs.org/), which is a [React](https://react.dev/)-based framework.
+- [Axios](https://axios-http.com/docs/intro) for API calls.
+- [Material-UI](https://mui.com/material-ui/getting-started/) for styling and design.
+- [Firebase](https://firebase.google.com/docs/auth) (via [NextAuth](https://next-auth.js.org/getting-started/introduction)) to handle user authentication.
+- [Firestore](https://firebase.google.com/docs/firestore) for persistent storage of user's collections. 
+- [DOMPurify](https://www.npmjs.com/package/dompurify) for sanitising text content and rendering HTML in object records correctly.
 
 If you are running this project locally, running `npm install` will install all the necessary packages, but the authentication system requires additional set-up. See the steps below for more details.
-
 
 ## Installation
 
@@ -69,14 +68,14 @@ To run Waltr yourself on your own machine, follow these steps.
 We had GOOGLE_APPLICATION_CREDENTIALS point to another file, `./service-account.json`, so you may want to create that too at the root of your project.
 
 For detailed instructions of what these variables should be and how to get set up see the official documentation:
-[https://next-auth.js.org/getting-started/introduction](NextAuth)
-[https://firebase.google.com/docs/auth/web/start](Firebase)
-[https://firebase.google.com/docs/firestore/quickstart](Firestore)
-[https://unsplash.com/documentation](Unsplash API)
+[NextAuth](https://next-auth.js.org/getting-started/introduction)
+[Firebase](https://firebase.google.com/docs/auth/web/start)
+[Firestore](https://firebase.google.com/docs/firestore/quickstart)
+[UnsplashAPI](https://unsplash.com/documentation)
 
 For a short but clear walkthrough of setting up NextJS for authentication and persistence, see the following videos. Aside from some small details these are reflective of the design of this project:
-[https://www.youtube.com/watch?v=zrjybW3UKr8](Part 1: Authentication)
-[https://www.youtube.com/watch?v=vUm-YIEbl7E](Part 2: Persistent Storage)
+[Part 1: Authentication](https://www.youtube.com/watch?v=zrjybW3UKr8)
+[Part 2: Persistent Storage](https://www.youtube.com/watch?v=vUm-YIEbl7E)
 
 6. When everything is installed and configured correctly, you can run the project locally:
    ```bash
