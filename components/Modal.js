@@ -185,7 +185,7 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         variant="h4"
                         id="transition-modal-title"
                         gutterBottom
-                        dangerouslySetInnerHTML={renderHtml(content.title)}  // Safely render any HTML in the title
+                        dangerouslySetInnerHTML={renderHTML(content.title)}  // Safely render any HTML in the title
                     />
 
                     {content.objectName && (
@@ -235,11 +235,11 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         )}
 
                     <Button
-                        size="small"
+                        size="medium"
                         target="_blank"
                         href={content.objectURL}
                         rel="noopener noreferrer"
-                        aria-label="More details about the artwork"
+                        aria-label="More details about the artefact"
                     >
                         More Details (External Site)
                     </Button>
