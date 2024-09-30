@@ -1,7 +1,7 @@
 // components/Error.js
 
 import React from 'react';
-import { Alert, AlertTitle, IconButton, Box } from '@mui/material';
+import { Alert, AlertTitle, IconButton, Box, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useError } from '@/contexts/ErrorContext';
 
