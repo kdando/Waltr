@@ -6,6 +6,7 @@ import { Modal, Fade, Box, Typography, Button, IconButton, CircularProgress } fr
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloseIcon from '@mui/icons-material/Close';
+import { sanitiseHTML, renderHTML } from '../utils/helpers'
 
 const CustomModal = ({ isOpen, onRequestClose, content }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -180,9 +181,12 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                         </Box>
                     )}
 
-                    <Typography variant="h4" id="transition-modal-title" gutterBottom>
-                        {content.title}
-                    </Typography>
+                    <Typography
+                        variant="h4"
+                        id="transition-modal-title"
+                        gutterBottom
+                        dangerouslySetInnerHTML={renderHtml(content.title)}  // Safely render any HTML in the title
+                    />
 
                     {content.objectName && (
                         <Typography variant="body1" id="transition-modal-description" gutterBottom>
@@ -203,9 +207,12 @@ const CustomModal = ({ isOpen, onRequestClose, content }) => {
                     )}
 
                     {content.briefDescription && (
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {content.briefDescription}
-                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            gutterBottom
+                            dangerouslySetInnerHTML={renderHTML(content.briefDescription)}  // safely render any html in the description
+                        />
                     )}
 
                     {content.repository && (
