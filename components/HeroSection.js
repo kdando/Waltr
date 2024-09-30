@@ -19,7 +19,7 @@ const HeroSection = () => {
                 setImageUrl(response.data.imageUrl);
             } catch (error) {
                 console.error('Error fetching random image:', error);
-                triggerError('Failed to load the hero image. Please try again later.');
+                triggerError('Failed to load the image. Please try again later.');
             } finally {
                 setIsLoading(false);
             }

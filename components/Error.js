@@ -8,9 +8,7 @@ import { useError } from '@/contexts/ErrorContext';
 const Error = () => {
     const { errorMessage, clearError } = useError();
 
-    console.log("Current error message:", errorMessage); // FYI
-
-    // if (!errorMessage) return null;
+    if (!errorMessage) return null;
 
     const handleClose = () => {
         clearError();
@@ -54,8 +52,12 @@ const Error = () => {
                 }}
             >
                 <AlertTitle id="error-title">Something went wrong :(</AlertTitle>
-                <span id="error-description">{errorMessage}</span>
-                <p> Close this box to reload the page.</p>
+                <Typography variant="body2" id="error-description" gutterBottom>
+                    {errorMessage}
+                </Typography>
+                <Typography variant="body2">
+                    Close this box to reload the page.
+                </Typography>
             </Alert>
         </Box>
     );

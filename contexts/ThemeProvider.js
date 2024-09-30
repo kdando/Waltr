@@ -61,7 +61,7 @@ const theme = createTheme({
         },
         button: {
             textTransform: 'none',
-            fontSize: '1rem', // Ensure buttons are easily readable
+            fontSize: '1rem'
         },
     },
     components: {
@@ -80,7 +80,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '&:focus': {
-                        outline: '2px solid #a57c48', // Visible focus state
+                        outline: '2px solid #a57c48'
                     },
                 },
             },
